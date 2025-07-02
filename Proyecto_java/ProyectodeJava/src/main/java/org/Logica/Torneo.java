@@ -12,4 +12,7 @@ public interface Torneo {
      participantes primero antes de empezar el torneo para que sea posible el formato*/
     private void generarEnfrentamientos(){}
     public void verEstadisticas();
+
+
+
 }

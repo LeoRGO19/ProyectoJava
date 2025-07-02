@@ -27,9 +27,12 @@ public class TorneoFactory {
         return new TorneoEstandar(); //puede ser un switch
     }
 
-    protected void configurarTorneo(Torneo torneo) {
+    public void configurarTorneo(Torneo torneo) {
         //Por implementar, según yo puede ser la configuración inicial que no podrá ser cambiada obviamente
+
+
     }
+
 
     public java.util.List<Torneo> obtenerTorneos() {
         return new java.util.ArrayList<>(torneos);

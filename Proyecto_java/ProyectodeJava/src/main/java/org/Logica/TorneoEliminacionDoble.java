@@ -3,7 +3,7 @@ package org.Logica;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class TorneoEstandar implements Torneo {
+public class TorneoEliminacionDoble implements Torneo {
     String nombre;
     LocalDate fecha;
     Calendario calendario;
@@ -17,6 +17,6 @@ public class TorneoEstandar implements Torneo {
 
     @Override
     public String toString() {
-        return "TorneoEstandar creado.";
+        return "TorneoEliminacionDoble creado.";
     }
 }

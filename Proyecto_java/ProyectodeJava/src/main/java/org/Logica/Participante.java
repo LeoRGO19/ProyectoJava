@@ -1,6 +1,16 @@
 package org.Logica;
 
 public class Participante {
-    private String nombre;
+
+
+
+
+
+
+
+    public int obtenerPuntaje(){
+
+        return 0; //EDITAR
+    }
 
 }
