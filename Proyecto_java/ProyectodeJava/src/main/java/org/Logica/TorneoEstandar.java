@@ -12,7 +12,7 @@ public class TorneoEstandar implements Torneo {
     public void agregarParticipante(Participante p){}
     public void eliminarParticipante(Participante p){}
     public void crearEsquema(int tipo){}
-    public void verEstadisticas(){}
+    public void verEstado(){}
     private void iniciarTorneo(){}
 
     @Override

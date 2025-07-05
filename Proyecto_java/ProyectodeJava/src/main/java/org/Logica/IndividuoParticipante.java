@@ -1,35 +1,36 @@
 package org.Logica;
 
-public class IndividuoParticipante extends Participante{
-    private String nombre;
+class IndividuoParticipante extends Participante {
     private String apellido;
-    private int edad; //ENTERO O STRING, AHI VEMOS
+    private int edad;
     private int puntaje;
 
-    public IndividuoParticipante(String NOMBRE, String APELLIDO, int EDAD){
-        this.nombre = NOMBRE;
-        this.apellido = APELLIDO;
-        this.edad = EDAD;
+    public IndividuoParticipante(String nombre, String apellido, int edad, String contacto) {
+        super(nombre, contacto);
+        this.apellido = apellido;
+        this.edad = edad;
+        this.puntaje = 0;
     }
 
     @Override
-    public int obtenerPuntaje(){
+    public int obtenerPuntaje() {
+        return puntaje;
+    }
 
-        return puntaje; //EDITAR
+    public void establecerPuntaje(int puntaje) {
+        this.puntaje = puntaje;
     }
-    public String getNombre(){
-        return nombre;
-    }
-    public String getApellido(){
+
+    public String obtenerApellido() {
         return apellido;
     }
-    public int getEdad(){
+
+    public int obtenerEdad() {
         return edad;
     }
+
     @Override
-    public String toString(){
-        return nombre + " " + apellido + " de " + edad + " años.";
+    public String toString() {
+        return nombre + " " + apellido + " de " + edad + " años";
     }
-
-
 }

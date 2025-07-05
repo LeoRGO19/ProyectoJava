@@ -1,6 +1,7 @@
 package org.Logica;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Random;
 
@@ -16,10 +17,26 @@ public class Enfrentamiento {
     private int duracionPrevista = 2; //duración que puede durar un encuentro (sin considerar el tiempo extra obvio)
     private LocalTime inicio;
     private LocalTime fin;
+    private LocalDateTime fecha;
+
 
     public Enfrentamiento(Participante n1, Participante n2){
         this.p1 = n1;
         this.p2 = n2;
+    }
+    public void establecerFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalDateTime obtenerFecha() {
+        return fecha;
+    }
+    public Participante obtenerParticipante1() {
+        return p1;
+    }
+
+    public Participante obtenerParticipante2() {
+        return p2;
     }
 
     /*esto lo pensé así pq no es como que todos los enfrentamientos vayan
@@ -154,8 +171,5 @@ public class Enfrentamiento {
         System.out.println("Ganador: " + getGanador() + x);
         System.out.println("Duración: " + (int)Duration.between(inicio, LocalTime.now()).getSeconds());
     }
-
-
-
 
 }

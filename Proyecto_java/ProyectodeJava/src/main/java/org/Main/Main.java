@@ -1,8 +1,6 @@
 package org.Main;
 import org.Logica.*;
 
-import org.Logica.TorneoEstandar;
-
 public class Main {
     public static void main(String[] args) {
 

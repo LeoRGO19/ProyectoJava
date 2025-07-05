@@ -2,30 +2,24 @@ package org.Logica;
 
 import java.util.ArrayList;
 
-public class Equipo extends Participante{
-private String nombre;
-private ArrayList<IndividuoParticipante> listaEquipo;
-private int puntaje;
+class Equipo extends Participante {
+    private ArrayList<IndividuoParticipante> listaEquipo;
 
-    public Equipo(String NOMBRE){
-        this.nombre = NOMBRE;
+    public Equipo(String nombre, String contacto) {
+        super(nombre, contacto);
+        this.listaEquipo = new ArrayList<>();
     }
 
-
-    public String getNombre() {
-        return nombre;
+    public void agregarMiembro(IndividuoParticipante miembro) {
+        listaEquipo.add(miembro);
     }
 
-    public ArrayList<IndividuoParticipante> getListaEquipo() {
+    public ArrayList<IndividuoParticipante> obtenerListaEquipo() {
         return listaEquipo;
     }
 
     @Override
-    public int obtenerPuntaje(){
-
-        return puntaje; //EDITAR
-}
-
-
-
+    public int obtenerPuntaje() {
+        return 0; // Implementar lógica de puntaje si es necesario
+    }
 }

@@ -12,6 +12,11 @@ public class TorneoClase implements Torneo{
         this.participantes = new ArrayList<>();
     }
 
+    @Override
+    public void configurar(String nombre, Disciplina disciplina, int maxParticipantes) {
+
+    }
+
     public void agregarParticipante(Participante p) {
         if (participantes.size() < cantidadJugadores) {
             participantes.add(p);
@@ -29,8 +34,18 @@ public class TorneoClase implements Torneo{
     }
     public void eliminarParticipante(Participante p){}
     public void crearEsquema(int tipo){}
-    public void verEstadisticas(){}
-    private void iniciarTorneo(){}
+    public void verEstado(){}
+    public void iniciarTorneo(){}
+
+    @Override
+    public void crearBracked(FormatoTorneo tipo) {
+
+    }
+
+    @Override
+    public void generarEnfrentamientos() {
+
+    }
 
     @Override
     public String toString() {
