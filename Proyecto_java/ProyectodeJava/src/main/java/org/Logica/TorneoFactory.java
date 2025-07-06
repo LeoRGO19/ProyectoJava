@@ -15,17 +15,18 @@ public class TorneoFactory {
         }
         return instancia;
     }
-
+    /*
     public Torneo crearTorneo() {
         Torneo torneo = crearInstanciaTorneo();
         configurarTorneo(torneo);
         torneos.add(torneo);
         return torneo;
     }
-
+    */
+    /*
     protected Torneo crearInstanciaTorneo() {
-        return new TorneoEstandar(); //puede ser un switch
-    }
+        return new TorneoEliminacionSimple(); //puede ser un switch
+    }*/
 
     public void configurarTorneo(Torneo torneo) {
         //Por implementar, según yo puede ser la configuración inicial que no podrá ser cambiada obviamente

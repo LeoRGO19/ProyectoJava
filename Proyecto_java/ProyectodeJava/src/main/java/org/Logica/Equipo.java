@@ -2,7 +2,7 @@ package org.Logica;
 
 import java.util.ArrayList;
 
-class Equipo extends Participante {
+public class Equipo extends Participante {
     private ArrayList<IndividuoParticipante> listaEquipo;
 
     public Equipo(String nombre, String contacto) {

@@ -3,6 +3,7 @@ package org.Logica;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class Enfrentamiento {
@@ -38,11 +39,24 @@ public class Enfrentamiento {
     public Participante obtenerParticipante2() {
         return p2;
     }
+    public int obtenerPuntaje1() {
+        return puntaje1;
+    }
+
+    public int obtenerPuntaje2() {
+        return puntaje2;
+    }
 
     /*esto lo pensé así pq no es como que todos los enfrentamientos vayan
     * a empezar al mismo tiempo creo yo, ejm que uno ganó está esperando a que
     * el otro gane para que empiece su enfrentamiento con ese*/
     public void iniciarEncuentro() {
+        if (p2 == null) { // Caso de BYE
+            resultadoP1 = true;
+            terminoEncuentro = true;
+            System.out.println(p1 + " avanza por BYE");
+            return;
+        }
         this.inicio = LocalTime.now();
         int tiempo = 0;
         Random r = new Random();
@@ -69,12 +83,13 @@ public class Enfrentamiento {
             resolverEmpate();
         } else {
             asignarGanador();
+            this.terminoEncuentro = true;
         }
 
-        System.out.println("victoria de " + getGanador());
+
+        System.out.println("victoria de " + obtenerGanador());
         this.fin = LocalTime.now();
         this.duracion = getDuracion();
-        this.terminoEncuentro = true;
     }
     //metodo que simula un puntaje realista
     private int simularPuntaje(int puntosMaximos) {
@@ -126,8 +141,9 @@ public class Enfrentamiento {
 
 
         }
-        System.out.println("Tiempo extra: " + p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
         asignarGanador();
+        System.out.println("Tiempo extra: " + p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
+        this.terminoEncuentro = true;
     }
     //para no escribir lw 2 veces
     private void asignarGanador() {
@@ -138,17 +154,26 @@ public class Enfrentamiento {
         }
     }
 
-    public Participante getGanador() {
-        if (!terminoEncuentro) {
+    public Participante obtenerGanador() {
+        if (terminoEncuentro) {
             if (resultadoP1) {
                 return p1;
-            } else {
+            } else if (resultadoP2) {
                 return p2;
             }
-        } else {
-            return null;
         }
+        return null;
+    }
 
+    public Participante obtenerPerdedor() {
+        if (terminoEncuentro) {
+            if (resultadoP1) {
+                return p2;
+            } else if (resultadoP2) {
+                return p1;
+            }
+        }
+        return null;
     }
     //se modificó a segundos por compatibilidad
     public int getDuracion() {
@@ -158,18 +183,27 @@ public class Enfrentamiento {
         return (int) Duration.between(inicio, fin).getSeconds();
     }
     //la dejé pero si acaso le veo uso como para ver estado
-    public boolean TerminoEncuentro(){ //DEJAR PARA DESPUES
+    public boolean haTerminadoEncuentro(){ //DEJAR PARA DESPUES
         return terminoEncuentro;
     }
     public void verEnfrentamiento() {
-        Participante ganador = getGanador();
-        String x = "";
-        if(ganador == null) {
-            x = "aún no decidido";
+        Participante ganador = obtenerGanador();
+        String ganadorStr = (ganador == null) ? "aún no decidido" : ganador.obtenerNombre();
+        String p2Nombre = (p2 != null) ? p2.obtenerNombre() : "BYE";
+        System.out.println(p1.obtenerNombre() + " " + puntaje1 + " - " + puntaje2 + " " + p2Nombre);
+        System.out.println("Ganador: " + ganadorStr);
+        System.out.println("Duración: " + (terminoEncuentro ? (int) duracion : 0));
+        if (fecha != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            System.out.println("Programado para: " + fecha.format(formatter));
         }
-        System.out.println(p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
-        System.out.println("Ganador: " + getGanador() + x);
-        System.out.println("Duración: " + (int)Duration.between(inicio, LocalTime.now()).getSeconds());
     }
 
+    @Override
+    public String toString() {
+        String p2Nombre = (p2 != null) ? p2.obtenerNombre() : "BYE";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String fechaFormateada = (fecha != null) ? fecha.format(formatter) : "Sin fecha";
+        return p1.obtenerNombre() + " vs " + p2Nombre + " (Programado para: " + fechaFormateada + ")";
+    }
 }

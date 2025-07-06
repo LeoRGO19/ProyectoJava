@@ -1,6 +1,6 @@
 package org.Logica;
 
-class IndividuoParticipante extends Participante {
+public class IndividuoParticipante extends Participante {
     private String apellido;
     private int edad;
     private int puntaje;
