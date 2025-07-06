@@ -2,5 +2,6 @@ package org.Logica;
 
 public enum FormatoTorneo {
     ELIMINACION_SIMPLE,
-    ELIMINACION_DOBLE
+    ELIMINACION_DOBLE,
+    LIGA
 }

@@ -48,25 +48,18 @@ public class MainPruebaNueva {
         */
 
 
-        // Torneo de eliminación doble
-        System.out.println("\n=== Torneo de Eliminación Doble ===");
-        Creador creadorDoble = gestor.obtenerCreador(FormatoTorneo.ELIMINACION_DOBLE);
-        Torneo torneoDoble1 = creadorDoble.crearTorneo("Copa Doble", "FUTBOL");
-        TorneoEliminacionDoble torneoDoble = (TorneoEliminacionDoble) torneoDoble1;
-        torneoDoble.configurar("Copa Doble", "FUTBOL", 8);
-        torneoDoble.agregarParticipante(new Equipo("Equipo X", "contactoX"));
-        torneoDoble.agregarParticipante(new Equipo("Equipo Y", "contactoY"));
-        torneoDoble.agregarParticipante(new Equipo("Equipo Z", "contactoZ"));
-        torneoDoble.agregarParticipante(new Equipo("Equipo W", "contactoW"));
-        torneoDoble.registrarObservador(new RegistradorTorneo());
-        torneoDoble.iniciarTorneo();
-        torneoDoble.generarBracket();
-        torneoDoble.verEstado();
-        torneoDoble.mostrarBracket();
-        torneoDoble.generarEnfrentamientos(); // Avanza a la siguiente ronda
-        torneoDoble.verEstado();
-        torneoDoble.mostrarBracket();
-
+        System.out.println("\n=== Torneo de Liga ===");
+        Creador creadorLiga = gestor.obtenerCreador(FormatoTorneo.LIGA);
+        Torneo torneoLiga = creadorLiga.crearTorneo("Liga Local", "FUTBOL");
+        torneoLiga.configurar("Liga Local", "FUTBOL", 8);
+        torneoLiga.agregarParticipante(new Equipo("Equipo 1", "contacto1"));
+        torneoLiga.agregarParticipante(new Equipo("Equipo 2", "contacto2"));
+        torneoLiga.agregarParticipante(new Equipo("Equipo 3", "contacto3"));
+        torneoLiga.agregarParticipante(new Equipo("Equipo 4", "contacto4"));
+        ((TorneoLiga) torneoLiga).registrarObservador(new RegistradorTorneo());
+        torneoLiga.iniciarTorneo();
+        torneoLiga.generarTabla();
+        torneoLiga.verEstado();
 
     }
 

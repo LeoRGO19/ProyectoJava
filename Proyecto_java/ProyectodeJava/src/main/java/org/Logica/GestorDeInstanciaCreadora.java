@@ -19,6 +19,8 @@ public class GestorDeInstanciaCreadora {
                 return new EliminacionSimpleCreador();
             case ELIMINACION_DOBLE:
                 return new EliminacionDobleCreador();
+            case LIGA:
+                return new LigaCreador();
             default:
                 throw new IllegalArgumentException("Formato de torneo no soportado: " + formato);
         }
