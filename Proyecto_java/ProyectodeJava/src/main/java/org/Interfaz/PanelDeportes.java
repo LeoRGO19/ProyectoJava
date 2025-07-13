@@ -3,12 +3,11 @@ package org.Interfaz;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelDeportes implements InterfazPaneles {
+public class PanelDeportes extends PanelBase {
 
-    private JPanel panel;
 
-    public PanelDeportes() {
-        panel = new JPanel();
+    public PanelDeportes(JFrame frame) {
+        super(frame);
         configurar();
         agregarComponentes();
     }
@@ -21,15 +20,21 @@ public class PanelDeportes implements InterfazPaneles {
 
     @Override
     public void agregarComponentes() {
-        panel.add(new BotonFutbol());
-        panel.add(new BotonBasket());
-        panel.add(new BotonTenis());
-        panel.add(new BotonPingPong());
-        panel.add(new BotonTiroConArco());
+        panel.add(new BotonFutbol(frame));
+        panel.add(new BotonBasket(frame));
+        panel.add(new BotonTenis(frame));
+        panel.add(new BotonPingPong(frame));
+        panel.add(new BotonTiroConArco(frame));
+        BotonVolver botonVolver = new BotonVolver(frame, new PanelDisciplina(frame));
+        panel.add(botonVolver);
     }
 
     @Override
     public JPanel obtenerPanel() {
         return panel;
+    }
+
+    public int getTipo() {
+        return 2; //Para poder volver al panel correcto.
     }
 }

@@ -1,22 +1,26 @@
 package org.Interfaz;
 
 
+import javax.swing.*;
+
 public class BotonFifa extends BotonBase{
 
-    public BotonFifa() {
-        super();
+    public BotonFifa(JFrame frame) {
+        super(frame);
     }
 
     @Override
     public void configurar() {
-        setBounds(400,110, 50,50);
+        setBounds(1100,400, 200,200);
         setBackground(java.awt.Color.BLACK);
         setForeground(java.awt.Color.BLACK);
-        setImagen(("C:/Users/Canito301/Desktop/ProyectoDOO/Proyecto_java/ProyectodeJava/src/main/resources/fifa_icono.png"));
+        setImagen(("/fifa_icono.png"));
     }
 
     @Override
     public void alPresionar() {
+
+        cambiarPanel(new PanelTipoTorneo(frame));
         System.out.println("¡Botón Fifa presionado!");
     }
 }

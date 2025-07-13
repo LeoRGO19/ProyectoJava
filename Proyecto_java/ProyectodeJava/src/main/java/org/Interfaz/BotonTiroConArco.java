@@ -1,24 +1,27 @@
 package org.Interfaz;
 
 
+import javax.swing.*;
 import java.awt.*;
 
 public class BotonTiroConArco extends BotonBase{
 
-    public BotonTiroConArco() {
-        super();
+    public BotonTiroConArco(JFrame frame) {
+        super(frame);
     }
 
     @Override
     public void configurar() {
-        setBounds(400,170, 50,50);
+        setBounds(1100,400, 200,200);
         setBackground(Color.LIGHT_GRAY);
         setForeground(java.awt.Color.BLACK);
-        setImagen(("C:/Users/Canito301/Desktop/ProyectoDOO/Proyecto_java/ProyectodeJava/src/main/resources/tiroconarco.png"));
+        setImagen(("/tiroconarco.png"));
     }
 
     @Override
     public void alPresionar() {
+
+        cambiarPanel(new PanelTipoTorneo(frame));
         System.out.println("¡Botón TiroConArco presionado!");
     }
 }
