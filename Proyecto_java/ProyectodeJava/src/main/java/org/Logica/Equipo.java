@@ -10,7 +10,10 @@ public class Equipo extends Participante {
         this.listaEquipo = new ArrayList<>();
     }
 
-    public void agregarMiembro(IndividuoParticipante miembro) {
+    public void agregarMiembro(IndividuoParticipante miembro) throws TorneoException {
+        if (miembro == null) {
+            throw new TorneoException("El miembro del equipo no puede ser nulo.");
+        }
         listaEquipo.add(miembro);
     }
 

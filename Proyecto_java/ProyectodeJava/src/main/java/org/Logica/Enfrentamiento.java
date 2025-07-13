@@ -9,70 +9,79 @@ import java.util.Random;
 public class Enfrentamiento {
     private Participante p1;
     private Participante p2;
+
     private int puntaje1 = 0;
     private int puntaje2 = 0;
-    protected boolean resultadoP1 = false;
-    protected boolean resultadoP2 = false;
-    protected boolean terminoEncuentro = false;
+    private int duracionPrevista = 2;
+    private int estado = 0; // 0: Pendiente, 1: En curso, 2: Terminado
+
     private float duracion;   //aqui es donde se va a guardar el tiempo del enfrentamiento como tal
-    private int duracionPrevista = 2; //duración que puede durar un encuentro (sin considerar el tiempo extra obvio)
+    //duración que puede durar un encuentro (sin considerar el tiempo extra obvio)
+
+    boolean resultadoP1 = false;
+    boolean resultadoP2 = false;
+    boolean terminoEncuentro = false;
+
+
     private LocalTime inicio;
     private LocalTime fin;
     private LocalDateTime fecha;
 
+    private SujetoTorneo torneo;
 
-    public Enfrentamiento(Participante n1, Participante n2){
+
+    public Enfrentamiento(Participante n1, Participante n2, Torneo torneo){
         this.p1 = n1;
         this.p2 = n2;
-    }
-    public void establecerFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
+        this.torneo = (SujetoTorneo) torneo;
     }
 
-    public LocalDateTime obtenerFecha() {
-        return fecha;
-    }
-    public Participante obtenerParticipante1() {
-        return p1;
-    }
+    public int obtenerEstado() {return estado;}
+    public void establecerFecha(LocalDateTime fecha) {this.fecha = fecha;}
+    public LocalDateTime obtenerFecha() {return fecha;}
+    public Participante obtenerParticipante1() {return p1;}
+    public Participante obtenerParticipante2() {return p2;}
+    public int obtenerPuntaje1() {return puntaje1;}
+    public int obtenerPuntaje2() {return puntaje2;}
 
-    public Participante obtenerParticipante2() {
-        return p2;
-    }
-    public int obtenerPuntaje1() {
-        return puntaje1;
-    }
-
-    public int obtenerPuntaje2() {
-        return puntaje2;
-    }
-
-    /*esto lo pensé así pq no es como que todos los enfrentamientos vayan
-    * a empezar al mismo tiempo creo yo, ejm que uno ganó está esperando a que
-    * el otro gane para que empiece su enfrentamiento con ese*/
-    public void iniciarEncuentro() {
-        if (p2 == null) { // Caso de BYE
-            resultadoP1 = true;
-            terminoEncuentro = true;
-            System.out.println(p1 + " avanza por BYE");
-            return;
+    private void notificarActualizacion() {
+        if (torneo != null) {
+            torneo.notificarObservadores(TipoEvento.RESULTADOS_ACTUALIZADOS, this);
         }
-        this.inicio = LocalTime.now();
-        int tiempo = 0;
+    }
+
+    public void iniciarEncuentro() {
+        if (terminoEncuentro) return;
+        LocalDateTime ahora = LocalDateTime.now();
+        if (fecha != null && ahora.isBefore(fecha)) {
+            long segundosEspera = Duration.between(ahora, fecha).getSeconds();
+            if (segundosEspera > 0) {
+                try {
+                    System.out.println("Esperando " + segundosEspera + " segundos para iniciar " + this);
+                    Thread.sleep(segundosEspera * 1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+        estado = 1; // En curso
+        inicio = LocalTime.now();
+        int temp1 = 0;
+        int temp2 = 0;
         Random r = new Random();
-
+        int tiempo = 0;
+        System.out.println(p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
         while (tiempo < duracionPrevista) {
-
-            int posiblesPuntos1 = r.nextInt(2); // puede hacer entre 0 y 1 puntos
-            int posiblesPuntos2 = r.nextInt(2);
-            //esto es super innecesario pero lo hace más realista xd
-            this.puntaje1 += simularPuntaje(posiblesPuntos1);
-            this.puntaje2 += simularPuntaje(posiblesPuntos2);
-            System.out.println(p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
-            // a segundos pq asi es más facil de probar
+            temp1 = puntaje1;
+            temp2 = puntaje2;
+            Boolean turno = r.nextBoolean();
+            int posiblesPuntos = obtenerPuntosPorDisciplina(r);
+            if (turno) {this.puntaje1 += simularPuntaje(posiblesPuntos);} else {this.puntaje2 += simularPuntaje(posiblesPuntos);}
+            notificarActualizacion();
+            if (posiblesPuntos > 0 && ( temp1 < puntaje1 || temp2 < puntaje2 )) {
+                System.out.println(p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
+            }
             tiempo = (int)Duration.between(inicio, LocalTime.now()).getSeconds();
-            //casting a int pq lw devuelve long y eso consume más recursos
-
         }
 
         System.out.println("Tiempo reglamentario terminado");
@@ -83,42 +92,55 @@ public class Enfrentamiento {
             resolverEmpate();
         } else {
             asignarGanador();
+            estado = 2;
             this.terminoEncuentro = true;
         }
 
-
+        notificarActualizacion();
         System.out.println("victoria de " + obtenerGanador());
         this.fin = LocalTime.now();
         this.duracion = getDuracion();
+
     }
-    //metodo que simula un puntaje realista
+    private int obtenerPuntosPorDisciplina(Random r) {
+        Disciplina disciplina = ((TorneoAbstracto) torneo).disciplina;
+        switch (disciplina) {
+            case FUTBOL:
+                return r.nextInt(2);
+            case FIFA:
+                return r.nextInt(2); // 0 o 1 punto
+            case BASKETBALL:
+                return r.nextInt(4); // 0, 1, 2 o 3 puntos
+            case TIROCONARCO:
+                return r.nextInt(11); // 0 a 10 puntos
+            case VALORANT:
+                return r.nextInt(2);
+            case CSGO:
+                return r.nextInt(2);
+            case ROCKETLEAGUE:
+                return r.nextInt(3); // 0, 1 o 2 puntos
+            default:
+                return r.nextInt(2); // Por defecto, 0 o 1 punto
+        }
+    }
     private int simularPuntaje(int puntosMaximos) {
         Random r = new Random();
         int puntos = 0;
-        // puntos maximos es un tema, porque por disciplina lw puede cambiar
-        //mi idea es hacer como una constante que tenga los puntos posibles de cada disciplina
-        // ejm, que puntos maximos de basquetbol sean 3 puntos, como puede hacer 2(dentro del area de 3, o 1 (tiro libre) o 0
-        // o futbol q puede hacer 0 o 1
-        // puede que haya que cambiarlo pq por ejm valorant si o si en una ronda se hace un punto
         for (int i = 0; i < puntosMaximos; i++) {
-
             try {
                 int minutosSimulados = 1 + r.nextInt(3); // puede durar de 1 a 5 min para posiblemente sumar puntos
                 Thread.sleep(minutosSimulados * 1000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-
-            // 50/50 de que haga un punto
             if (r.nextBoolean()) {
                 puntos++;
-
             }
         }
 
         return puntos;
     }
-    //por si hay empate el bucle arreglado
+
     private void resolverEmpate() {
         Random r = new Random();
         while (puntaje1 == puntaje2) {
@@ -129,23 +151,22 @@ public class Enfrentamiento {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            //pueden hacer punto o no, pero si uno hace gana, por eso el break
+            int posiblesPuntos = obtenerPuntosPorDisciplina(r);
             if (r.nextBoolean()) {
-                puntaje1++;
+                puntaje1 += simularPuntaje(posiblesPuntos);
+            } else {
+                puntaje2 += simularPuntaje(posiblesPuntos);
+            }
+            if (puntaje1 != puntaje2) {
                 break;
             }
-            if (r.nextBoolean()) {
-                puntaje2++;
-                break;
-            }
-
-
         }
         asignarGanador();
+        estado = 2;
         System.out.println("Tiempo extra: " + p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
         this.terminoEncuentro = true;
     }
-    //para no escribir lw 2 veces
+
     private void asignarGanador() {
         if (puntaje1 > puntaje2) {
             resultadoP1 = true;
@@ -175,15 +196,15 @@ public class Enfrentamiento {
         }
         return null;
     }
-    //se modificó a segundos por compatibilidad
+
     public int getDuracion() {
         if (inicio == null || fin == null) {
             return 0;
         }
         return (int) Duration.between(inicio, fin).getSeconds();
     }
-    //la dejé pero si acaso le veo uso como para ver estado
-    public boolean haTerminadoEncuentro(){ //DEJAR PARA DESPUES
+
+    public boolean haTerminadoEncuentro(){
         return terminoEncuentro;
     }
     public void verEnfrentamiento() {

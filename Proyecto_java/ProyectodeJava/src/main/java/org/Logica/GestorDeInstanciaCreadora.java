@@ -13,16 +13,11 @@ public class GestorDeInstanciaCreadora {
         return INSTANCE;
     }
 
-    public Creador obtenerCreador(FormatoTorneo formato) {
-        switch (formato) {
-            case ELIMINACION_SIMPLE:
-                return new EliminacionSimpleCreador();
-            case ELIMINACION_DOBLE:
-                return new EliminacionDobleCreador();
-            case LIGA:
-                return new LigaCreador();
-            default:
-                throw new IllegalArgumentException("Formato de torneo no soportado: " + formato);
-        }
+    public Creador obtenerCreador(FormatoTorneo formato) throws TorneoException {
+        return switch (formato) {
+            case ELIMINACION_SIMPLE -> new EliminacionSimpleCreador();
+            case LIGA -> new LigaCreador();
+            default -> throw new TorneoException("Formato de torneo no soportado: " + formato);
+        };
     }
 }

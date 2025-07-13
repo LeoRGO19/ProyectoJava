@@ -2,12 +2,12 @@ package org.Main;
 import org.Logica.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TorneoException {
 
-        Torneo torneo1 = new TorneoEliminacionSimple("torneo1", "FUTBOL");
+        Torneo torneo1 = new TorneoEliminacionSimple("torneo1", "FUTBOL", 8);
         IndividuoParticipante Lucas = new IndividuoParticipante("Lucas", "Ramirez", 15, "p1@GMAiL");
         IndividuoParticipante Martin = new IndividuoParticipante("Martin", "Ramirez", 12, "p2@GMAIL");
-        Enfrentamiento t = new Enfrentamiento(Lucas,Martin);
+        Enfrentamiento t = new Enfrentamiento(Lucas,Martin, torneo1);
         t.iniciarEncuentro();
         System.out.println(t.obtenerGanador());
 

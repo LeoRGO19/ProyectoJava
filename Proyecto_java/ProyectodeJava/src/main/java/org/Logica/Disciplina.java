@@ -2,9 +2,9 @@ package org.Logica;
 
 public enum Disciplina {
     FUTBOL,
-    TENIS,
-    TIROCONARCO,
     TENISDEMESA,
+    TIROCONARCO,
+    TENIS,
     BASKETBALL,
     LOL,
     VALORANT,
