@@ -1,6 +1,6 @@
 package org.Logica;
 
-abstract class Participante {
+public abstract class Participante {
     protected String nombre;
     protected String contacto;
 

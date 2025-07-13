@@ -3,10 +3,10 @@ package org.Logica;
 import java.util.ArrayList;
 
 public abstract class TorneoAbstracto {
-    protected String nombre;
+    public String nombre;
     protected Disciplina disciplina;
     protected int maxParticipantes;
-    protected ArrayList<Participante> participantes;
+    public ArrayList<Participante> participantes;
     protected Calendario calendario;
     protected ArrayList<ObservadorTorneo> observadores;
     protected boolean torneoIniciado;
@@ -20,7 +20,9 @@ public abstract class TorneoAbstracto {
         this.torneoIniciado = false;
         this.maxParticipantes = maxParticipantes;
     }
-
+    public ArrayList<Participante> obtenerParticipantes() {
+        return participantes;
+    }
     protected void configurar(String nombre, String disciplina, int maxParticipantes) {
         this.nombre = nombre;
         this.disciplina = Disciplina.valueOf(disciplina);
@@ -54,6 +56,22 @@ public abstract class TorneoAbstracto {
         if (!participantes.isEmpty() && !participantes.remove(p)) {
             participantes.remove(p);
             notificarObservadores(TipoEvento.PARTICIPANTE_ELIMINADO, p);
+        }
+    }
+    public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {
+        if (listaParticipantes == null || listaParticipantes.isEmpty()) {
+            throw new TorneoException("La lista de participantes no puede estar vacía.");
+        }
+        // Verificar que todos los participantes sean del mismo tipo (individuos o equipos)
+        Class<?> tipo = listaParticipantes.get(0).getClass();
+        for (Participante p : listaParticipantes) {
+            if (!p.getClass().equals(tipo)) {
+                throw new TorneoException("La lista contiene una mezcla de individuos y equipos, lo cual no está permitido.");
+            }
+        }
+        // Agregar cada participante usando el método existente
+        for (Participante p : listaParticipantes) {
+            agregarParticipante(p);
         }
     }
 

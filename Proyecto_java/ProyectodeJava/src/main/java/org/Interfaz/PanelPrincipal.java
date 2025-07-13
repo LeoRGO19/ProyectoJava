@@ -4,6 +4,8 @@ import org.Logica.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PanelPrincipal extends PanelBase{
 
@@ -51,7 +53,6 @@ public class PanelPrincipal extends PanelBase{
             frame.repaint();
         });
 
-
         JButton botonInscribirEnTorneo = new JButton("Inscripcion Torneo");
         botonInscribirEnTorneo.setBackground(new Color(40, 40, 40));
         botonInscribirEnTorneo.setForeground(Color.WHITE);
@@ -61,12 +62,25 @@ public class PanelPrincipal extends PanelBase{
         botonInscribirEnTorneo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botonInscribirEnTorneo.setBounds(1115,170,200,40);
         panel.add(botonInscribirEnTorneo);
+        botonInscribirEnTorneo.addActionListener(e -> {
+            List<List<Participante>> resultado = null;
+            try {
+                resultado = LectorParticipantes.leerParticipantes("C:/Users/Leorg/OneDrive/Escritorio/Nueva carpeta/tt/participantes.txt");
+            } catch (TorneoException ex) {
+                throw new RuntimeException(ex);
+            }
+            ArrayList<Participante> individuos = new ArrayList<>(resultado.get(0));
+            // Agregar solo individuos
+            try {
+                ((TorneoAbstracto) Navegador.torneo).agregarParticipantesDesdeLista(individuos);
+                for (Participante d : ((TorneoAbstracto) Navegador.torneo).obtenerParticipantes()) {
+                    System.out.println(d);
+                }
 
-
-
-
-
-
+            } catch (TorneoException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         JButton botonSpectearTorneo = new JButton("Observar Torneo");
         botonSpectearTorneo.setBackground(new Color(40, 40, 40));
@@ -79,18 +93,46 @@ public class PanelPrincipal extends PanelBase{
         panel.add(botonSpectearTorneo);
 
         botonSpectearTorneo.addActionListener(e->{
-        PanelLiga panelLiga = new PanelLiga(frame);
+        PanelObservador panelObservador = new PanelObservador(frame);
+        panelObservador.setImagenFondo("/fondoprincipal.jpg");
         Navegador.historial.push(new PanelPrincipal(frame));  // guardar antes de cambiar
-            frame.setContentPane(new PanelLiga(frame).obtenerPanel());
+            frame.setContentPane(new PanelObservador(frame).obtenerPanel());
             frame.revalidate();
             frame.repaint();
 
-            frame.setContentPane(panelLiga.obtenerPanel());
+            frame.setContentPane(panelObservador.obtenerPanel());
             frame.revalidate();
             frame.repaint();
 
         });
 
+        JButton botonIniciarTorneo = new JButton("Iniciar Torneo");
+        botonIniciarTorneo.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        botonIniciarTorneo.setFocusPainted(false);
+        botonIniciarTorneo.setBackground(new Color(40, 40, 40));
+        botonIniciarTorneo.setForeground(Color.WHITE);
+        botonIniciarTorneo.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        botonIniciarTorneo.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambia el cursor a "mano"
+
+        botonIniciarTorneo.setBounds(600, 300, 200, 40);
+        panel.add(botonIniciarTorneo);
+        botonIniciarTorneo.addActionListener(e -> {
+            botonIniciarTorneo.setEnabled(false);  // Deshabilitar mientras inicia
+            SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    (Navegador.torneo).iniciarTorneo();
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    botonIniciarTorneo.setEnabled(true);  // Habilitar de nuevo
+                    System.out.println("Torneo iniciado correctamente.");
+                }
+            };
+            worker.execute();
+        });
 
 
     }

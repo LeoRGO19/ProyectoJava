@@ -80,6 +80,7 @@ public class Enfrentamiento {
             notificarActualizacion();
             if (posiblesPuntos > 0 && ( temp1 < puntaje1 || temp2 < puntaje2 )) {
                 System.out.println(p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
+                notificarActualizacion();
             }
             tiempo = (int)Duration.between(inicio, LocalTime.now()).getSeconds();
         }
@@ -163,6 +164,7 @@ public class Enfrentamiento {
         }
         asignarGanador();
         estado = 2;
+        notificarActualizacion();
         System.out.println("Tiempo extra: " + p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
         this.terminoEncuentro = true;
     }

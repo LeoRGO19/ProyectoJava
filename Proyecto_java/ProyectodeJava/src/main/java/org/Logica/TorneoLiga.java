@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 import java.time.format.DateTimeFormatter;
 
 public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo {
-    private ArrayList<Integer> puntos;
-    private ArrayList<Integer> victorias;
-    private ArrayList<Integer> derrotas;
-    private ArrayList<Integer> puntosAFavor;
-    private ArrayList<Integer> puntosEnContra;
-    private ArrayList<Enfrentamiento> enfrentamientos;
+    public ArrayList<Integer> puntos;
+    public ArrayList<Integer> victorias;
+    public ArrayList<Integer> derrotas;
+    public ArrayList<Integer> puntosAFavor;
+    public ArrayList<Integer> puntosEnContra;
+    public ArrayList<Enfrentamiento> enfrentamientos;
 
     public TorneoLiga(String nombre, String disciplina, int maxParticipantes) {
         super(nombre, disciplina, maxParticipantes);
@@ -153,7 +153,14 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         Participante ganador = participantes.get(indices.get(0));
         notificarObservadores(TipoEvento.TORNEO_FINALIZADO, ganador);
     }
-
+    @Override
+    public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {
+        super.agregarParticipantesDesdeLista(listaParticipantes);
+    }
+    @Override
+    public ArrayList<Participante> obtenerParticipantes(){
+        return super.obtenerParticipantes();
+    }
     private void actualizarEstadisticas(Enfrentamiento enf) {
         Participante p1 = enf.obtenerParticipante1();
         Participante p2 = enf.obtenerParticipante2();

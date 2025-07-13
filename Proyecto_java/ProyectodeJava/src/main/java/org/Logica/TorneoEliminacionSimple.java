@@ -9,8 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, SujetoTorneo {
     private Enfrentamiento[][] rondas;
+    public Enfrentamiento[] rondasS;
     private int rondaActual;
     private int numRondas;
+    public int iniciado = 0;
 
     public TorneoEliminacionSimple(String nombre, String disciplina, int maxParticipantes){
         super(nombre, disciplina, maxParticipantes);
@@ -18,7 +20,13 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         rondas = null;
         numRondas = 0;
     }
-
+    @Override
+    public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {
+        super.agregarParticipantesDesdeLista(listaParticipantes);
+    }
+    public ArrayList<Participante> obtenerParticipantes(){
+        return super.obtenerParticipantes();
+    }
     @Override
     public void configurar(String nombre, String disciplina, int maxParticipantes) {
         super.configurar(nombre, disciplina, maxParticipantes);
@@ -44,7 +52,23 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         super.notificarObservadores(tipo, datos);
     }
 
-
+    @Override
+    public void iniciarTorneo() throws TorneoException{
+        if (!esPotenciaDeDos(participantes.size())) {
+            throw new TorneoException("Para iniciar el formato de eliminación simple eñ número de participantes debe ser potencia de 2");
+        }
+        super.iniciarTorneo();
+        iniciado = 1;
+        generarBracket();
+        notificarObservadores(TipoEvento.TORNEO_INICIADO, this);
+        while (rondaActual < numRondas) {
+            Enfrentamiento[][] l = obtenerRondas();
+            verEstado();
+            mostrarBracket();
+            avanzarRonda();
+        }
+        iniciado = 2;
+    }
 
     private boolean esPotenciaDeDos(int n) {
         return n > 0 && (n & (n - 1)) == 0;
@@ -62,21 +86,6 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
             rondas[r] = new Enfrentamiento[numParticipantes / (1 << (r + 1))];
         }
         generarEnfrentamientos();
-    }
-
-    @Override
-    public void iniciarTorneo() throws TorneoException{
-        if (!esPotenciaDeDos(participantes.size())) {
-            throw new TorneoException("Para iniciar el formato de eliminación simple eñ número de participantes debe ser potencia de 2");
-        }
-        super.iniciarTorneo();
-        generarBracket();
-        notificarObservadores(TipoEvento.TORNEO_INICIADO, this);
-        while (rondaActual < numRondas) {
-            verEstado();
-            mostrarBracket();
-            avanzarRonda();
-        }
     }
 
     @Override
@@ -107,6 +116,7 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         }
         generarCalendario();
         notificarObservadores(TipoEvento.ENFRENTAMIENTOS_GENERADOS, rondas[rondaActual]);
+        rondasS = rondas[rondaActual];
     }
 
     public void avanzarRonda() throws TorneoException {
@@ -132,6 +142,7 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
             Thread.currentThread().interrupt();
         }
         notificarObservadores(TipoEvento.RESULTADOS_ACTUALIZADOS, rondas[rondaActual]);
+        rondasS = rondas[rondaActual];
 
         if (rondaActual == numRondas - 1) {
             Participante ganador = rondas[rondaActual][0].obtenerGanador();
@@ -171,6 +182,7 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
             }
         }
     }
+
 
     public void mostrarBracket() {
         System.out.println("Bracket de Eliminación Simple: " + nombre);

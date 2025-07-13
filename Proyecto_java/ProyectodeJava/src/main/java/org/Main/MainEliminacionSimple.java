@@ -21,7 +21,6 @@ public class MainEliminacionSimple {
 
             // Iniciar torneo
             torneo.iniciarTorneo();
-
             // Mostrar estado final
             torneo.verEstado();
             torneo.mostrarBracket();

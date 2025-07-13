@@ -1,6 +1,6 @@
 package org.Logica;
 
-class EventoTorneo {
+public class EventoTorneo {
     private TipoEvento tipo;
     private Torneo torneo;
     private Object datos; // Datos adicionales, como participante o enfrentamientos

@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class PanelBracket extends PanelBase {
-    private JPanel bracketPanel;
+public class PanelCalendario extends PanelBase {
+    private JPanel calendarioPanel;
     private SwingWorker<Void, List<String>> worker;
 
-    public PanelBracket(JFrame frame) {
+    public PanelCalendario(JFrame frame) {
         super(frame);
         configurar();
         agregarComponentes();
@@ -28,10 +28,10 @@ public class PanelBracket extends PanelBase {
 
     @Override
     public void agregarComponentes() {
-        bracketPanel = new JPanel();
-        bracketPanel.setOpaque(false);
-        bracketPanel.setLayout(new GridLayout(0, 1, 10, 10));
-        JScrollPane scrollPane = new JScrollPane(bracketPanel);
+        calendarioPanel = new JPanel();
+        calendarioPanel.setOpaque(false);
+        calendarioPanel.setLayout(new GridLayout(0, 1, 10, 10));
+        JScrollPane scrollPane = new JScrollPane(calendarioPanel);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -49,41 +49,10 @@ public class PanelBracket extends PanelBase {
             protected Void doInBackground() {
                 while (!isCancelled()) {
                     List<String> lineas = new ArrayList<>();
-                    if (Navegador.torneo instanceof TorneoEliminacionSimple) {
-                        TorneoEliminacionSimple torneo = (TorneoEliminacionSimple) Navegador.torneo;
-                        lineas.add("Bracket de Eliminación Simple: " + torneo.nombre);
-                        lineas.add("---------------------------------------------------------------------------------");
-                        Enfrentamiento[][] rondas = torneo.obtenerRondas();
-                        for (int r = 0; r <= torneo.obtenerRondaActual() && r < torneo.obtenerNumRondas(); r++) {
-                            if (rondas[r] != null && rondas[r].length > 0) {
-                                lineas.add("Ronda " + (r + 1) + ":");
-                                for (Enfrentamiento enf : rondas[r]) {
-                                    if (enf != null) {
-                                        String p2Nombre = enf.obtenerParticipante2() != null ? enf.obtenerParticipante2().obtenerNombre() : "BYE";
-                                        String ganador = enf.obtenerGanador() != null ? enf.obtenerGanador().obtenerNombre() : "Pendiente";
-                                        String estado = switch (enf.obtenerEstado()) {
-                                            case 0 -> "Pendiente";
-                                            case 1 -> "En curso";
-                                            case 2 -> "Terminado";
-                                            default -> "Desconocido";
-                                        };
-                                        lineas.add(String.format("├── %-20s %d vs %-20s %d (%s) → Ganador: %s",
-                                                enf.obtenerParticipante1().obtenerNombre(), enf.obtenerPuntaje1(),
-                                                p2Nombre, enf.obtenerPuntaje2(), estado, ganador));
-                                    } else {
-                                        lineas.add("├── Enfrentamiento no inicializado");
-                                    }
-                                }
-                                if (r < torneo.obtenerRondaActual()) {
-                                    lineas.add("│");
-                                }
-                            }
-                        }
-                        lineas.add("---------------------------------------------------------------------------------");
-                    } else if (Navegador.torneo instanceof TorneoLiga) {
+                    if (Navegador.torneo instanceof TorneoLiga) {
                         TorneoLiga torneo = (TorneoLiga) Navegador.torneo;
-                        lineas.add("Enfrentamientos de Liga: " + torneo.nombre);
-                        lineas.add("---------------------------------------------------------------------------------");
+                        lineas.add("Enfrentamientos: " + torneo.nombre);
+                        lineas.add("-------------------------------------------------------------");
                         lineas.add(String.format("%-30s | %-19s | %-10s", "Enfrentamiento", "Fecha", "Resultado"));
                         lineas.add("-------------------------------------------------------------");
 
@@ -98,6 +67,31 @@ public class PanelBracket extends PanelBase {
                                     enf.obtenerParticipante1().obtenerNombre() + " vs " + p2Nombre,
                                     fechaFormateada,
                                     resultado));
+                        }
+                        lineas.add("-------------------------------------------------------------");
+                    } else if (Navegador.torneo instanceof TorneoEliminacionSimple) {
+                        TorneoEliminacionSimple torneo = (TorneoEliminacionSimple) Navegador.torneo;
+                        lineas.add("Enfrentamientos de la Ronda Actual: " + torneo.nombre);
+                        lineas.add("-------------------------------------------------------------");
+                        lineas.add(String.format("%-30s | %-19s | %-10s", "Enfrentamiento", "Fecha", "Resultado"));
+                        lineas.add("-------------------------------------------------------------");
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                        Enfrentamiento[] rondas = torneo.rondasS;
+                        if (rondas != null) {
+                            for (Enfrentamiento enf : rondas) {
+                                if (enf != null) {
+                                    String p2Nombre = (enf.obtenerParticipante2() != null) ? enf.obtenerParticipante2().obtenerNombre() : "BYE";
+                                    String fechaFormateada = (enf.obtenerFecha() != null) ? enf.obtenerFecha().format(formatter) : "Sin fecha";
+                                    String resultado = enf.haTerminadoEncuentro() ?
+                                            enf.obtenerParticipante1().obtenerNombre() + " " + enf.obtenerPuntaje1() + " - " +
+                                                    enf.obtenerPuntaje2() + " " + p2Nombre : "Pendiente";
+                                    lineas.add(String.format("%-30s | %-19s | %-10s",
+                                            enf.obtenerParticipante1().obtenerNombre() + " vs " + p2Nombre,
+                                            fechaFormateada,
+                                            resultado));
+                                }
+                            }
                         }
                         lineas.add("-------------------------------------------------------------");
                     }
@@ -115,16 +109,16 @@ public class PanelBracket extends PanelBase {
             @Override
             protected void process(List<List<String>> chunks) {
                 for (List<String> lineas : chunks) {
-                    bracketPanel.removeAll();
-                    bracketPanel.setLayout(new GridLayout(lineas.size(), 1, 10, 10));
+                    calendarioPanel.removeAll();
+                    calendarioPanel.setLayout(new GridLayout(lineas.size(), 1, 10, 10));
                     for (String linea : lineas) {
                         JLabel label = new JLabel(linea);
                         label.setForeground(Color.WHITE);
                         label.setFont(new Font("Monospaced", Font.PLAIN, 14));
-                        bracketPanel.add(label);
+                        calendarioPanel.add(label);
                     }
-                    bracketPanel.revalidate();
-                    bracketPanel.repaint();
+                    calendarioPanel.revalidate();
+                    calendarioPanel.repaint();
                 }
             }
         };
