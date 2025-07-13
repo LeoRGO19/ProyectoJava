@@ -1,0 +1,22 @@
+package org.Interfaz;
+
+
+public class BotonPingPong extends BotonBase{
+
+    public BotonPingPong() {
+        super();
+    }
+
+    @Override
+    public void configurar() {
+        setBounds(500,110, 50,50);
+        setBackground(java.awt.Color.BLACK);
+        setForeground(java.awt.Color.BLACK);
+        setImagen(("C:/Users/Canito301/Desktop/ProyectoDOO/Proyecto_java/ProyectodeJava/src/main/resources/pingpong_icono.jpg"));
+    }
+
+    @Override
+    public void alPresionar() {
+        System.out.println("¡Botón PingPong presionado!");
+    }
+}
