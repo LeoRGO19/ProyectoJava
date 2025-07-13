@@ -7,12 +7,12 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class VentanaValorant extends JFrame {
+public class PartidaRocketLeague extends JFrame {
 
     private BufferedImage imagen1;
     private BufferedImage imagen2;
 
-    public VentanaValorant() {
+    public PartidaRocketLeague() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1600, 900);
@@ -30,8 +30,8 @@ public class VentanaValorant extends JFrame {
 
         public FondoPanel() {
             try {
-                URL url1 = getClass().getResource("/valorant_team1.jpg");
-                URL url2 = getClass().getResource("/valorant_team2.jpg");
+                URL url1 = getClass().getResource("/rocket_team1.jpg");
+                URL url2 = getClass().getResource("/rocket_team2.jpg");
 
                 if (url1 != null) imagen1 = ImageIO.read(url1);
                 if (url2 != null) imagen2 = ImageIO.read(url2);
@@ -57,7 +57,7 @@ public class VentanaValorant extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new VentanaValorant());
+        SwingUtilities.invokeLater(() -> new PartidaRocketLeague());
     }
 
 }

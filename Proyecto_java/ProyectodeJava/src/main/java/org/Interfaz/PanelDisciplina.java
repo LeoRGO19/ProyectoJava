@@ -23,7 +23,7 @@ public class PanelDisciplina extends PanelBase {
     public void agregarComponentes() {
         panel.add(new BotonVideojuegos(frame));
         panel.add(new BotonDeportes(frame));
-        BotonVolver botonVolver = new BotonVolver(frame, new PanelPrincipal(frame));
+        BotonVolver botonVolver = new BotonVolver(frame);
         botonVolver.setBounds(85,320,200,200);
         panel.add(botonVolver);
     }

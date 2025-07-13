@@ -1,14 +1,14 @@
 package org.Interfaz;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class BotonVolver extends BotonBase {
 
-    private final PanelBase destino;
 
-    public BotonVolver(JFrame frame, PanelBase destino) {
+    public BotonVolver(JFrame frame) {
         super(frame);
-        this.destino = destino;
+
     }
 
     @Override
@@ -17,6 +17,7 @@ public class BotonVolver extends BotonBase {
         setBackground(java.awt.Color.BLACK);
         setForeground(java.awt.Color.BLACK);
         setImagen(("/flecha.png"));
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     protected void cambiarPanel(PanelBase nuevoPanel) {
@@ -30,7 +31,10 @@ public class BotonVolver extends BotonBase {
 
     @Override
     public void alPresionar() {
-        cambiarPanel(destino);
-        System.out.println("Boton Volver presionado");
+        if (!Navegador.historial.isEmpty()) {
+            PanelBase anterior = Navegador.historial.pop();
+            cambiarPanel(anterior);
+            System.out.println("Boton Volver presionado");
+        }
     }
 }
