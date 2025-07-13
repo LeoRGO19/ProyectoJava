@@ -1,10 +1,14 @@
 package org.Interfaz;
 
 
+import org.Logica.*;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class BotonLiga extends BotonBase{
+
+
 
     public BotonLiga(JFrame frame) {
         super(frame);
@@ -28,6 +32,9 @@ public class BotonLiga extends BotonBase{
 
         Navegador.historial.push(new PanelTipoTorneo(frame));
         cambiarPanel(new PanelConfirmacion(frame));
+
+        Navegador.t = FormatoTorneo.LIGA;
+        System.out.println(Navegador.t);
         System.out.println("¡Botón Liga presionado!");
     }
 }

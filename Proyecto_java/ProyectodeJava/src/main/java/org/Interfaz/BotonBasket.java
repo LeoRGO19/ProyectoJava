@@ -24,6 +24,7 @@ public class BotonBasket extends BotonBase{
 
         Navegador.historial.push(new PanelDeportes(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
+        Navegador.palabra = "BASKETBALL";
         System.out.println("¡Botón Basket presionado!");
     }
 }

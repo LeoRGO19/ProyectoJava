@@ -1,10 +1,14 @@
 package org.Interfaz;
 
 
+import org.Logica.FormatoTorneo;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class BotonEliminacionSimple extends BotonBase{
+
+    FormatoTorneo t;
 
     public BotonEliminacionSimple(JFrame frame) {
         super(frame);
@@ -29,6 +33,8 @@ public class BotonEliminacionSimple extends BotonBase{
 
         Navegador.historial.push(new PanelTipoTorneo(frame));
         cambiarPanel(new PanelConfirmacion(frame));
+        Navegador.t = FormatoTorneo.ELIMINACION_SIMPLE;
+        System.out.println(Navegador.t);
         System.out.println("¡Botón Eliminacion simple presionado!");
     }
 }

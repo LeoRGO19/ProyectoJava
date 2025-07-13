@@ -44,20 +44,7 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         super.notificarObservadores(tipo, datos);
     }
 
-    @Override
-    public void iniciarTorneo() throws TorneoException{
-        if (!esPotenciaDeDos(participantes.size())) {
-            throw new TorneoException("Para iniciar el formato de eliminación simple eñ número de participantes debe ser potencia de 2");
-        }
-        super.iniciarTorneo();
-        while (rondaActual < numRondas) {
-            verEstado();
-            mostrarBracket();
-            avanzarRonda();
-        }
-        generarBracket();
-        notificarObservadores(TipoEvento.TORNEO_INICIADO, this);
-    }
+
 
     private boolean esPotenciaDeDos(int n) {
         return n > 0 && (n & (n - 1)) == 0;
@@ -75,6 +62,21 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
             rondas[r] = new Enfrentamiento[numParticipantes / (1 << (r + 1))];
         }
         generarEnfrentamientos();
+    }
+
+    @Override
+    public void iniciarTorneo() throws TorneoException{
+        if (!esPotenciaDeDos(participantes.size())) {
+            throw new TorneoException("Para iniciar el formato de eliminación simple eñ número de participantes debe ser potencia de 2");
+        }
+        super.iniciarTorneo();
+        generarBracket();
+        notificarObservadores(TipoEvento.TORNEO_INICIADO, this);
+        while (rondaActual < numRondas) {
+            verEstado();
+            mostrarBracket();
+            avanzarRonda();
+        }
     }
 
     @Override

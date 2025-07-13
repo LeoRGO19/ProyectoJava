@@ -24,6 +24,7 @@ public class BotonPingPong extends BotonBase{
 
         Navegador.historial.push(new PanelDeportes(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
+        Navegador.palabra = "TENISDEMESA";
         System.out.println("¡Botón PingPong presionado!");
     }
 }

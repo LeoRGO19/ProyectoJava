@@ -6,6 +6,8 @@ import java.awt.*;
 
 public class BotonFutbol extends BotonBase{
 
+    String futbol;
+
     public BotonFutbol(JFrame frame) {
         super(frame);
     }
@@ -24,6 +26,8 @@ public class BotonFutbol extends BotonBase{
 
         Navegador.historial.push(new PanelDeportes(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
+        Navegador.palabra = "FUTBOL";
+
         System.out.println("¡Botón Futbol presionado!");
     }
 }

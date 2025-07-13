@@ -24,6 +24,7 @@ public class BotonFifa extends BotonBase{
 
         Navegador.historial.push(new PanelVideojuegos(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
+        Navegador.palabra = "FIFA";
         System.out.println("¡Botón Fifa presionado!");
     }
 }

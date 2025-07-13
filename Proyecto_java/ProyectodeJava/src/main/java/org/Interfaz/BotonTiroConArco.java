@@ -24,6 +24,7 @@ public class BotonTiroConArco extends BotonBase{
 
         Navegador.historial.push(new PanelDeportes(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
+        Navegador.palabra = "TIROCONARCO";
         System.out.println("¡Botón TiroConArco presionado!");
     }
 }

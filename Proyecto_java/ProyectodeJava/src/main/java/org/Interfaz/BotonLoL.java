@@ -24,6 +24,7 @@ public class BotonLoL extends BotonBase{
 
         Navegador.historial.push(new PanelVideojuegos(frame)); //Variable global para poder volver si hay mas de un panel
         cambiarPanel(new PanelTipoTorneo(frame));
+        Navegador.palabra = "LOL";
         System.out.println("¡Botón LoL presionado!");
     }
 }

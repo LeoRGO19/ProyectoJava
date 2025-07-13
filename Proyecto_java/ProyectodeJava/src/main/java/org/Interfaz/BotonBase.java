@@ -1,5 +1,7 @@
 package org.Interfaz;
 
+import org.Logica.TorneoException;
+
 import javax.swing.*;
 import java.awt.*;
 public abstract class BotonBase extends JButton implements InterfazBotones {
@@ -10,7 +12,13 @@ public abstract class BotonBase extends JButton implements InterfazBotones {
         super();
         this.frame = frame;
         configurar();
-        addActionListener(e -> alPresionar());
+        addActionListener(e -> {
+            try {
+                alPresionar();
+            } catch (TorneoException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
     public void configurar() {
         setSize(new Dimension(100, 50));
