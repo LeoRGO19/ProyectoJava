@@ -16,11 +16,13 @@ public class BotonTiroConArco extends BotonBase{
         setBackground(Color.LIGHT_GRAY);
         setForeground(java.awt.Color.BLACK);
         setImagen(("/tiroconarco.png"));
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void alPresionar() {
 
+        Navegador.historial.push(new PanelDeportes(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
         System.out.println("¡Botón TiroConArco presionado!");
     }

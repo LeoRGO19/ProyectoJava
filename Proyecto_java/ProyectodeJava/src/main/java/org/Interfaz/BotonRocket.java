@@ -1,6 +1,7 @@
 package org.Interfaz;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class BotonRocket extends BotonBase{
 
@@ -14,11 +15,13 @@ public class BotonRocket extends BotonBase{
         setBackground(java.awt.Color.BLACK);
         setForeground(java.awt.Color.BLACK);
         setImagen(("/rocket_icono.png"));
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void alPresionar() {
 
+        Navegador.historial.push(new PanelVideojuegos(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
         System.out.println("¡Botón Rocket League presionado!");
     }

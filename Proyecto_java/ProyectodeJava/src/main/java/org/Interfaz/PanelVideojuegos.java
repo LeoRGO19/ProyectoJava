@@ -25,7 +25,7 @@ public class PanelVideojuegos extends PanelBase {
         panel.add(new BotonFifa(frame));
         panel.add(new BotonCS(frame));
         panel.add(new BotonRocket(frame));
-        BotonVolver botonVolver = new BotonVolver(frame, new PanelDisciplina(frame));
+        BotonVolver botonVolver = new BotonVolver(frame);
         panel.add(botonVolver);
     }
 
@@ -34,7 +34,5 @@ public class PanelVideojuegos extends PanelBase {
         return panel;
     }
 
-    public int getTipo() {
-        return 1; // Para poder volver al panel correcto
-    }
+
 }

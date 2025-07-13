@@ -2,6 +2,7 @@ package org.Interfaz;
 
 
 import javax.swing.*;
+import java.awt.*;
 
 public class BotonVideojuegos extends BotonBase{
 
@@ -16,12 +17,14 @@ public class BotonVideojuegos extends BotonBase{
         setBackground(java.awt.Color.BLACK);
         setForeground(java.awt.Color.BLACK);
         setImagen(("/Videojuegos.jpg"));
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
 
     }
 
     @Override
     public void alPresionar() {
 
+        Navegador.historial.push(new PanelDisciplina(frame));
         cambiarPanel(new PanelVideojuegos(frame));
         System.out.println("¡Botón Videojuegos presionado!");
     }

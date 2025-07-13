@@ -24,7 +24,9 @@ public class PanelTipoTorneo extends PanelBase {
     public void agregarComponentes() {
         panel.add(new BotonLiga(frame));
         panel.add(new BotonEliminacionSimple(frame));
-
+        BotonVolver botonVolver = new BotonVolver(frame);
+        botonVolver.setBounds(85,320,200,200);
+        panel.add(botonVolver);
     }
 
     @Override

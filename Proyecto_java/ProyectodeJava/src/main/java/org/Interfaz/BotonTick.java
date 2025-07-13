@@ -4,26 +4,26 @@ package org.Interfaz;
 import javax.swing.*;
 import java.awt.*;
 
-public class BotonFifa extends BotonBase{
+public class BotonTick extends BotonBase{
 
-    public BotonFifa(JFrame frame) {
+    public BotonTick(JFrame frame) {
         super(frame);
     }
 
     @Override
     public void configurar() {
-        setBounds(1100,400, 200,200);
+        setBounds(595,320, 200,200);
         setBackground(java.awt.Color.BLACK);
         setForeground(java.awt.Color.BLACK);
-        setImagen(("/fifa_icono.png"));
+        setImagen(("/tick.jpg"));
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     @Override
     public void alPresionar() {
 
-        Navegador.historial.push(new PanelVideojuegos(frame));
+        Navegador.historial.push(new PanelTipoTorneo(frame));
         cambiarPanel(new PanelTipoTorneo(frame));
-        System.out.println("¡Botón Fifa presionado!");
+        System.out.println("¡Botón CSGO presionado!");
     }
 }
