@@ -22,8 +22,8 @@ public class PanelCalendario extends PanelBase {
     @Override
     public void configurar() {
         panel.setLayout(new BorderLayout());
-        panel.setBackground(new Color(70, 45, 90));
-        setImagenFondo("/fondoprincipal.jpg");
+        panel.setBackground(new Color(70, 155, 90));
+        setImagenFondo("/fondo.jpg");
     }
 
     @Override
@@ -34,6 +34,7 @@ public class PanelCalendario extends PanelBase {
         JScrollPane scrollPane = new JScrollPane(calendarioPanel);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(0,400,0,0));
         panel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());

@@ -28,5 +28,6 @@ public class BotonCS extends BotonBase{
         cambiarPanel(new PanelTipoTorneo(frame));
         Navegador.palabra = "CSGO";
         System.out.println("¡Botón CSGO presionado!");
+
     }
 }

@@ -8,7 +8,10 @@ package org.Logica;
  * </p>
  */
 public abstract class Participante {
+    /** Variable utilizada para almacenar el nombre */
     protected String nombre;
+
+    /**  Variable que será utilizada para almacenar el contacto */
     protected String contacto;
 
     /**

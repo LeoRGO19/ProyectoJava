@@ -8,7 +8,6 @@ package org.Logica;
  * formato de eliminación simple, en el cual los participantes son eliminados tras perder
  * un enfrentamiento hasta que quede un único ganador.</p>
  *
- * <p>           </p>
  * <pre>{@code
  * Creador creador = new EliminacionSimpleCreador();
  * Torneo torneo = creador.crearTorneo("Torneo 1", "FUTBOL", 8);
