@@ -6,6 +6,30 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
+/**
+ * Representa un enfrentamiento entre dos {@link Participante}s dentro de un torneo
+ * controlado por un {@link SujetoTorneo}.
+ *
+ * <p>Simula el desarrollo del partido según la disciplina del torneo,
+ * actualiza puntajes, resuelve empates con tiempo extra y notifica a los
+ * observadores del torneo cada vez que ocurre un cambio relevante.</p>
+ *
+ * <ol>
+ *   <li>El enfrentamiento se crea en estado <em>Pendiente</em>.</li>
+ *   <li>Se establece una fecha programada (opcional).</li>
+ *   <li>Al invocar {@link #iniciarEncuentro()}, el estado pasa a <em>En curso</em>
+ *       y se simula la duración reglamentaria.</li>
+ *   <li>Si hay empate, se llama a {@link #resolverEmpate()} para tiempo extra.</li>
+ *   <li>Finalmente se asigna un ganador con {@link #asignarGanador()} y el estado pasa a <em>Terminado</em>.</li>
+ * </ol>
+ *
+ * <p>Los puntajes máximos por jugada varían según la disciplina (Fútbol, Valorant, etc.);
+ * véase {@link #obtenerPuntosPorDisciplina(Random)}.</p>
+ *
+ * @author Canito301, LeoRGO19
+ *
+ */
+
 public class Enfrentamiento {
     private Participante p1;
     private Participante p2;
@@ -15,8 +39,7 @@ public class Enfrentamiento {
     private int duracionPrevista = 2;
     private int estado = 0; // 0: Pendiente, 1: En curso, 2: Terminado
 
-    private float duracion;   //aqui es donde se va a guardar el tiempo del enfrentamiento como tal
-    //duración que puede durar un encuentro (sin considerar el tiempo extra obvio)
+    private float duracion;   
 
     boolean resultadoP1 = false;
     boolean resultadoP2 = false;
@@ -30,11 +53,22 @@ public class Enfrentamiento {
     private SujetoTorneo torneo;
 
 
+    /* Constructores       */
+
+    /**
+     * Crea un enfrentamiento entre dos participantes asociado a un torneo.
+     *
+     * @param n1     Primer participante.
+     * @param n2     Segundo participante.
+     * @param torneo Instancia del torneo al que pertenece (utilizado para notificaciones).
+     */
     public Enfrentamiento(Participante n1, Participante n2, Torneo torneo){
         this.p1 = n1;
         this.p2 = n2;
         this.torneo = (SujetoTorneo) torneo;
     }
+
+    /* Getters y setters */
 
     public int obtenerEstado() {return estado;}
     public void establecerFecha(LocalDateTime fecha) {this.fecha = fecha;}
@@ -44,11 +78,21 @@ public class Enfrentamiento {
     public int obtenerPuntaje1() {return puntaje1;}
     public int obtenerPuntaje2() {return puntaje2;}
 
+    /**
+     * Notifica a los observadores del torneo que los resultados han sido actualizados.
+     */
+
     private void notificarActualizacion() {
         if (torneo != null) {
             torneo.notificarObservadores(TipoEvento.RESULTADOS_ACTUALIZADOS, this);
         }
     }
+
+    /**
+     * Inicia la simulación del enfrentamiento.
+     * Respeta la {@code fecha} programada (espera si es futura), notifica estados
+     * y resuelve automáticamente empates con tiempo extra.
+     */
 
     public void iniciarEncuentro() {
         if (terminoEncuentro) return;
@@ -103,6 +147,15 @@ public class Enfrentamiento {
         this.duracion = getDuracion();
 
     }
+
+    /**
+     * Devuelve la cantidad máxima de puntos que se pueden anotar en una jugada,
+     * dependiendo de la disciplina del torneo.
+     *
+     * @param r Instancia de {@link Random} para generar valores aleatorios.
+     * @return  Número máximo de puntos posibles.
+     */
+
     private int obtenerPuntosPorDisciplina(Random r) {
         Disciplina disciplina = ((TorneoAbstracto) torneo).disciplina;
         switch (disciplina) {
@@ -113,7 +166,7 @@ public class Enfrentamiento {
             case BASKETBALL:
                 return r.nextInt(4); // 0, 1, 2 o 3 puntos
             case TIROCONARCO:
-                return r.nextInt(11); // 0 a 10 puntos
+                return r.nextInt(11); // 0 a10 puntos
             case VALORANT:
                 return r.nextInt(2);
             case CSGO:
@@ -124,6 +177,15 @@ public class Enfrentamiento {
                 return r.nextInt(2); // Por defecto, 0 o 1 punto
         }
     }
+
+    /**
+     * Simula la obtención de puntos en una jugada, durmiendo brevemente para
+     * imitar el paso del tiempo.
+     *
+     * @param puntosMaximos Valor máximo de puntos posibles en la jugada.
+     * @return Puntos conseguidos (0 .. puntosMaximos).
+     */
+
     private int simularPuntaje(int puntosMaximos) {
         Random r = new Random();
         int puntos = 0;
@@ -141,6 +203,10 @@ public class Enfrentamiento {
 
         return puntos;
     }
+
+    /**
+     * Resuelve un empate agregando tiempo extra hasta que haya un ganador.
+     */
 
     private void resolverEmpate() {
         Random r = new Random();
@@ -169,6 +235,10 @@ public class Enfrentamiento {
         this.terminoEncuentro = true;
     }
 
+    /**
+     * Asigna el ganador del encuentro según los puntajes alcanzados.
+     */
+
     private void asignarGanador() {
         if (puntaje1 > puntaje2) {
             resultadoP1 = true;
@@ -176,6 +246,12 @@ public class Enfrentamiento {
             resultadoP2 = true;
         }
     }
+
+    /**
+     * Obtiene el {@link Participante} ganador si el encuentro ha finalizado.
+     *
+     * @return Ganador, o {@code null} si aún no hay resultado definitivo.
+     */
 
     public Participante obtenerGanador() {
         if (terminoEncuentro) {
@@ -188,6 +264,12 @@ public class Enfrentamiento {
         return null;
     }
 
+    /**
+     * Obtiene el perdedor del encuentro si ha finalizado.
+     *
+     * @return Perdedor, o {@code null} si el encuentro no ha concluido.
+     */
+
     public Participante obtenerPerdedor() {
         if (terminoEncuentro) {
             if (resultadoP1) {
@@ -199,6 +281,12 @@ public class Enfrentamiento {
         return null;
     }
 
+    /**
+     * Devuelve la duración total, en segundos, del encuentro completado.
+     *
+     * @return Duración en segundos, o 0 si no se ha finalizado.
+     */
+
     public int getDuracion() {
         if (inicio == null || fin == null) {
             return 0;
@@ -206,9 +294,20 @@ public class Enfrentamiento {
         return (int) Duration.between(inicio, fin).getSeconds();
     }
 
+    /**
+     * Indica si el enfrentamiento ya terminó.
+     *
+     * @return {@code true} si finalizó, de lo contrario {@code false}.
+     */
+
     public boolean haTerminadoEncuentro(){
         return terminoEncuentro;
     }
+
+    /**
+     * Muestra en consola los detalles actuales del enfrentamiento (puntajes, ganador, duración).
+     */
+
     public void verEnfrentamiento() {
         Participante ganador = obtenerGanador();
         String ganadorStr = (ganador == null) ? "aún no decidido" : ganador.obtenerNombre();
@@ -221,6 +320,12 @@ public class Enfrentamiento {
             System.out.println("Programado para: " + fecha.format(formatter));
         }
     }
+
+    /**
+     *Representación textual: muestra participantes y la fecha programada.
+     *
+     * @return Cadena descriptiva del enfrentamiento.
+     */
 
     @Override
     public String toString() {

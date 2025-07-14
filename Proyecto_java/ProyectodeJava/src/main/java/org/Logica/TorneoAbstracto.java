@@ -2,14 +2,51 @@ package org.Logica;
 
 import java.util.ArrayList;
 
+/**
+ * Clase abstracta que representa un torneo genérico.
+ * <p>
+ * Contiene la estructura básica y funcionalidad común para diferentes tipos de torneos,
+ * como gestión de participantes, observadores, y control del estado del torneo.
+ * </p>
+ */
+
 public abstract class TorneoAbstracto {
+
+    /** Nombre del torneo */
+
     public String nombre;
+
+    /** Disciplina del torneo */
+
     protected Disciplina disciplina;
+
+    /** Número máximo de participantes permitidos */
+
     protected int maxParticipantes;
+
+    /** Lista de participantes registrados */
+
     public ArrayList<Participante> participantes;
+
+    /** Calendario asociado al torneo */
+
     protected Calendario calendario;
+
+    /** Lista de observadores que escuchan eventos del torneo */
+
     protected ArrayList<ObservadorTorneo> observadores;
+
+    /** Indica si el torneo ha sido iniciado */
+
     protected boolean torneoIniciado;
+
+    /**
+     * Constructor que inicializa el torneo con nombre, disciplina y máximo de participantes.
+     *
+     * @param nombre          El nombre del torneo.
+     * @param disciplina      El nombre de la disciplina (convertido a {@link Disciplina}).
+     * @param maxParticipantes Número máximo de participantes permitidos.
+     */
 
     public TorneoAbstracto(String nombre, String disciplina, int maxParticipantes) {
         this.nombre = nombre;
@@ -20,14 +57,38 @@ public abstract class TorneoAbstracto {
         this.torneoIniciado = false;
         this.maxParticipantes = maxParticipantes;
     }
+
+    /**
+     * Obtiene la lista de participantes del torneo.
+     *
+     * @return La lista de participantes.
+     */
+
     public ArrayList<Participante> obtenerParticipantes() {
         return participantes;
     }
+
+    /**
+     * Configura los datos básicos del torneo.
+     *
+     * @param nombre          El nombre del torneo.
+     * @param disciplina      La disciplina (nombre) del torneo.
+     * @param maxParticipantes El máximo de participantes permitidos.
+     */
+
     protected void configurar(String nombre, String disciplina, int maxParticipantes) {
         this.nombre = nombre;
         this.disciplina = Disciplina.valueOf(disciplina);
         this.maxParticipantes = maxParticipantes;
     }
+
+    /**
+     * Agrega un participante al torneo.
+     *
+     * @param p El participante a agregar.
+     * @throws TorneoException Si el torneo ya fue iniciado, el participante es nulo,
+     *                         o se ha alcanzado el máximo de participantes.
+     */
 
     protected void agregarParticipante(Participante p) throws TorneoException {
         if (torneoIniciado) {
@@ -42,6 +103,14 @@ public abstract class TorneoAbstracto {
         participantes.add(p);
         notificarObservadores(TipoEvento.PARTICIPANTE_AGREGADO, p);
     }
+
+    /**
+     * Elimina un participante del torneo.
+     *
+     * @param p El participante a eliminar.
+     * @throws TorneoException Si el torneo ya fue iniciado, no hay participantes,
+     *                         o el participante no está registrado.
+     */
 
     protected void eliminarParticipante(Participante p) throws TorneoException {
         if (torneoIniciado) {
@@ -58,6 +127,15 @@ public abstract class TorneoAbstracto {
             notificarObservadores(TipoEvento.PARTICIPANTE_ELIMINADO, p);
         }
     }
+
+    /**
+     * Agrega múltiples participantes a partir de una lista.
+     * Verifica que todos los participantes sean del mismo tipo (individuos o equipos).
+     *
+     * @param listaParticipantes La lista de participantes a agregar.
+     * @throws TorneoException Si la lista es nula, vacía o contiene mezcla de tipos.
+     */
+
     public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {
         if (listaParticipantes == null || listaParticipantes.isEmpty()) {
             throw new TorneoException("La lista de participantes no puede estar vacía.");
@@ -75,6 +153,17 @@ public abstract class TorneoAbstracto {
         }
     }
 
+    /**
+     * Inicia el torneo si hay al menos dos participantes registrados.
+     *
+     * @throws TorneoException Si no hay suficientes participantes para iniciar.
+     */
+
+    /**
+     * Registra un observador para recibir notificaciones de eventos.
+     *
+     */
+
     protected void iniciarTorneo() throws TorneoException {
         if (participantes.size() < 2) {
             throw new TorneoException("Se necesitan al menos 2 participantes para iniciar el torneo.");
@@ -84,13 +173,32 @@ public abstract class TorneoAbstracto {
         }
     }
 
+    /**
+     * Registra un observador para recibir notificaciones de eventos.
+     *
+     * @param observador El observador a registrar.
+     */
+
     protected void registrarObservador(ObservadorTorneo observador) {
         observadores.add(observador);
     }
 
+    /**
+     * Elimina un observador registrado.
+     *
+     * @param observador El observador a eliminar.
+     */
+
     protected void eliminarObservador(ObservadorTorneo observador) {
         observadores.remove(observador);
     }
+
+    /**
+     * Notifica a todos los observadores registrados sobre un evento ocurrido.
+     *
+     * @param tipo  El tipo de evento que ocurrió.
+     * @param datos Datos adicionales asociados al evento (puede ser null).
+     */
 
     protected void notificarObservadores(TipoEvento tipo, Object datos) {
         for (ObservadorTorneo observador : observadores) {

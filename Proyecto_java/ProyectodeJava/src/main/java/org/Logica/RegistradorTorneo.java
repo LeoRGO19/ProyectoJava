@@ -1,6 +1,22 @@
 package org.Logica;
 
+/**
+ * Implementación de {@link ObservadorTorneo} que registra eventos de un torneo
+ * imprimiendo mensajes en la consola.
+ * <p>
+ * Este observador escucha diferentes tipos de eventos como la adición o eliminación de participantes,
+ * el inicio o finalización del torneo, generación de enfrentamientos y actualización de resultados.
+ * </p>
+ */
+
 public class RegistradorTorneo implements ObservadorTorneo {
+
+    /**
+     * Procesa la notificación de un evento del torneo imprimiendo detalles en la consola.
+     *
+     * @param evento El evento del torneo que se ha producido.
+     */
+
     @Override
     public void actualizar(EventoTorneo evento) {
         System.out.println("Evento: " + evento.getTipo() + " en torneo " + evento.getTorneo().getClass().getSimpleName());

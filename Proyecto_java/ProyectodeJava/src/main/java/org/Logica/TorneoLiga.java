@@ -8,13 +8,65 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Implementación de un torneo en formato Liga (todos contra todos).
+ * <p>
+ * Los participantes se enfrentan entre sí, acumulando puntos por victorias,
+ * empates y derrotas. Se mantiene una tabla de clasificación que ordena los
+ * participantes según puntos, victorias, puntos a favor y puntos en contra.
+ * </p>
+ * <p>
+ * Esta clase maneja la generación de enfrentamientos, la ejecución simultánea
+ * de partidos en hilos, la actualización de estadísticas y la notificación a
+ * observadores de eventos relevantes.
+ * </p>
+ */
+
 public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo {
+
+    /**
+     * Lista de puntos acumulados por cada participante.
+     */
+
     public ArrayList<Integer> puntos;
+
+    /**
+     * Lista de victorias acumuladas por cada participante.
+     */
+
     public ArrayList<Integer> victorias;
+
+    /**
+     * Lista de derrotas acumuladas por cada participante.
+     */
+
     public ArrayList<Integer> derrotas;
+
+    /**
+     * Lista de puntos anotados a favor por cada participante.
+     */
+
     public ArrayList<Integer> puntosAFavor;
+
+    /**
+     * Lista de puntos recibidos en contra por cada participante.
+     */
+
     public ArrayList<Integer> puntosEnContra;
+
+    /**
+     * Lista de enfrentamientos generados para el torneo.
+     */
+
     public ArrayList<Enfrentamiento> enfrentamientos;
+
+    /**
+     * Construye un torneo en formato Liga con los datos básicos.
+     *
+     * @param nombre          Nombre del torneo.
+     * @param disciplina      Disciplina o deporte del torneo.
+     * @param maxParticipantes Máximo número de participantes permitidos.
+     */
 
     public TorneoLiga(String nombre, String disciplina, int maxParticipantes) {
         super(nombre, disciplina, maxParticipantes);
@@ -26,10 +78,25 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         this.enfrentamientos = new ArrayList<>();
     }
 
+    /**
+     * Configura el torneo con los parámetros dados.
+     *
+     * @param nombre          Nombre del torneo.
+     * @param disciplina      Disciplina del torneo.
+     * @param maxParticipantes Número máximo de participantes.
+     */
+
     @Override
     public void configurar(String nombre, String disciplina, int maxParticipantes) {
         super.configurar(nombre, disciplina, maxParticipantes);
     }
+
+    /**
+     * Agrega un participante al torneo y inicializa sus estadísticas.
+     *
+     * @param p Participante a agregar.
+     * @throws TorneoException Si no se puede agregar el participante.
+     */
 
     @Override
     public void agregarParticipante(Participante p) throws TorneoException {
@@ -40,6 +107,13 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         puntosAFavor.add(0);
         puntosEnContra.add(0);
     }
+
+    /**
+     * Elimina un participante del torneo y sus estadísticas.
+     *
+     * @param p Participante a eliminar.
+     * @throws TorneoException Si el participante no existe o no puede ser eliminado.
+     */
 
     @Override
     public void eliminarParticipante(Participante p) throws TorneoException {
@@ -53,6 +127,12 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
             puntosEnContra.remove(index);
         }
     }
+
+    /**
+     * Inicia el torneo, genera la tabla de enfrentamientos y notifica el inicio.
+     *
+     * @throws TorneoException Si no se cumplen las condiciones para iniciar.
+     */
 
     @Override
     public void iniciarTorneo() throws TorneoException {
@@ -76,10 +156,18 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         super.notificarObservadores(tipo, datos);
     }
 
+    /**
+     * No soporta brackets, lanza excepción si se invoca.
+     */
+
     @Override
     public void generarBracket() {
         throw new UnsupportedOperationException("El formato de liga no soporta brackets");
     }
+
+    /**
+     * Genera la tabla inicializando las estadísticas y crea los enfrentamientos.
+     */
 
     @Override
     public void generarTabla() {
@@ -97,6 +185,11 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         }
         generarEnfrentamientos();
     }
+
+    /**
+     * Genera todos los enfrentamientos posibles entre los participantes, ejecutándolos
+     * en paralelo, actualizando estadísticas y notificando resultados.
+     */
 
     @Override
     public void generarEnfrentamientos() {
@@ -153,14 +246,36 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         Participante ganador = participantes.get(indices.get(0));
         notificarObservadores(TipoEvento.TORNEO_FINALIZADO, ganador);
     }
+
+    /**
+     * Agrega participantes desde una lista, verificando su validez.
+     *
+     * @param listaParticipantes Lista de participantes a agregar.
+     * @throws TorneoException Si la lista contiene tipos mixtos o es inválida.
+     */
+
     @Override
     public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {
         super.agregarParticipantesDesdeLista(listaParticipantes);
     }
+
+    /**
+     * Devuelve la lista de participantes del torneo.
+     *
+     * @return Lista de participantes.
+     */
+
     @Override
     public ArrayList<Participante> obtenerParticipantes(){
         return super.obtenerParticipantes();
     }
+
+    /**
+     * Actualiza las estadísticas tras la finalización de un enfrentamiento.
+     *
+     * @param enf Enfrentamiento terminado.
+     */
+
     private void actualizarEstadisticas(Enfrentamiento enf) {
         Participante p1 = enf.obtenerParticipante1();
         Participante p2 = enf.obtenerParticipante2();
@@ -190,6 +305,10 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         }
     }
 
+    /**
+     * Genera el calendario de enfrentamientos.
+     */
+
     @Override
     public void generarCalendario() {
         calendario = new Calendario();
@@ -198,6 +317,10 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         }
     }
 
+    /**
+     * Muestra el estado actual del torneo, incluyendo la tabla y calendario.
+     */
+
     @Override
     public void verEstado() {
         System.out.println("Torneo: " + nombre + " (Formato Liga)");
@@ -205,6 +328,10 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         System.out.println("\nCalendario del Torneo:");
         calendario.mostrarCalendario();
     }
+
+    /**
+     * Muestra la tabla de clasificación ordenada por criterios estándar.
+     */
 
     public void mostrarTabla() {
         System.out.println("\nTabla de Clasificación: " + nombre);
@@ -239,7 +366,6 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         }
         System.out.println("---------------------------------------------------------------------------------");
 
-        // Mostrar enfrentamientos con fechas y resultados
         System.out.println("\nEnfrentamientos:");
         System.out.println("-------------------------------------------------------------");
         System.out.printf("%-30s | %-19s | %-10s%n", "Enfrentamiento", "Fecha", "Resultado");
@@ -259,6 +385,9 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         System.out.println("-------------------------------------------------------------");
     }
 
+    /**
+     * Lanza excepción si se invoca.
+     */
     public void mostrarBracket() {
         throw new UnsupportedOperationException("El formato de liga no soporta brackets");
     }

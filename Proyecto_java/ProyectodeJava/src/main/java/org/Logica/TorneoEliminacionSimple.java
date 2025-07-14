@@ -7,12 +7,44 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Implementación de un torneo con formato de eliminación simple.
+ * <p>
+ * En este formato, los participantes compiten en rondas eliminatorias
+ * hasta que queda un único ganador. El número de participantes debe ser
+ * potencia de dos para que el torneo funcione correctamente.
+ * </p>
+ */
+
 public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, SujetoTorneo {
+
+    /** Matriz de enfrentamientos por ronda */
+
     private Enfrentamiento[][] rondas;
+
+    /** Array con los enfrentamientos actuales de la ronda */
+
     public Enfrentamiento[] rondasS;
+
+    /** Índice de la ronda actual */
+
     private int rondaActual;
+
+    /** Número total de rondas */
+
     private int numRondas;
+
+    /** Estado del torneo: 0=no iniciado, 1=iniciado, 2=finalizado */
+
     public int iniciado = 0;
+
+    /**
+     * Constructor que inicializa el torneo con nombre, disciplina y máximo participantes.
+     *
+     * @param nombre          Nombre del torneo.
+     * @param disciplina      Disciplina del torneo.
+     * @param maxParticipantes Número máximo de participantes.
+     */
 
     public TorneoEliminacionSimple(String nombre, String disciplina, int maxParticipantes){
         super(nombre, disciplina, maxParticipantes);
@@ -20,6 +52,7 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         rondas = null;
         numRondas = 0;
     }
+
     @Override
     public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {
         super.agregarParticipantesDesdeLista(listaParticipantes);
@@ -52,6 +85,13 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         super.notificarObservadores(tipo, datos);
     }
 
+    /**
+     * Inicia el torneo asegurando que el número de participantes sea potencia de dos,
+     * genera el bracket y avanza por las rondas hasta que finaliza el torneo.
+     *
+     * @throws TorneoException Si el número de participantes no es potencia de dos.
+     */
+
     @Override
     public void iniciarTorneo() throws TorneoException{
         if (!esPotenciaDeDos(participantes.size())) {
@@ -70,9 +110,22 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         iniciado = 2;
     }
 
+    /**
+     * Verifica si un número es potencia de dos.
+     *
+     * @param n Número a verificar.
+     * @return true si n es potencia de dos, false en caso contrario.
+     */
+
     private boolean esPotenciaDeDos(int n) {
         return n > 0 && (n & (n - 1)) == 0;
     }
+
+    /**
+     * Genera la estructura del bracket para el torneo.
+     *
+     * @throws TorneoException Si no hay participantes.
+     */
 
     @Override
     public void generarBracket() throws TorneoException {
@@ -88,10 +141,22 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         generarEnfrentamientos();
     }
 
+    /**
+     * Este formato no soporta generación de tablas de clasificación.
+     *
+     * @throws TorneoException Siempre, porque no está soportado.
+     */
+
     @Override
     public void generarTabla() throws TorneoException {
         throw new TorneoException("El formato de eliminación simple no soporta tablas de clasificación.");
     }
+
+    /**
+     * Genera los enfrentamientos para la ronda actual.
+     *
+     * @throws TorneoException Si ocurre algún error en la generación.
+     */
 
     @Override
     public void generarEnfrentamientos() throws TorneoException {
@@ -118,6 +183,13 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         notificarObservadores(TipoEvento.ENFRENTAMIENTOS_GENERADOS, rondas[rondaActual]);
         rondasS = rondas[rondaActual];
     }
+
+    /**
+     * Avanza la ronda actual ejecutando los enfrentamientos en paralelo.
+     * Notifica resultados y finaliza el torneo cuando corresponde.
+     *
+     * @throws TorneoException En caso de errores en la ejecución.
+     */
 
     public void avanzarRonda() throws TorneoException {
         if (rondaActual >= numRondas) {
@@ -155,6 +227,11 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         rondaActual++;
         generarEnfrentamientos();
     }
+
+    /**
+     * Muestra el estado actual del torneo, incluyendo calendario y enfrentamientos.
+     */
+
     @Override
     public void verEstado() {
         System.out.println("Torneo: " + nombre + " (Eliminación Simple)");
@@ -171,6 +248,11 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
             }
         }
     }
+
+    /**
+     * Genera el calendario de enfrentamientos para la ronda actual.
+     */
+
     @Override
     public void generarCalendario() {
         calendario = new Calendario();
@@ -183,6 +265,9 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         }
     }
 
+    /**
+     * Muestra en consola el bracket actual del torneo.
+     */
 
     public void mostrarBracket() {
         System.out.println("Bracket de Eliminación Simple: " + nombre);
@@ -203,17 +288,40 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
             }
         }
     }
+
+    /**
+     * Muestra el calendario actual del torneo.
+     */
+
     public void verCalendario(){
         calendario.mostrarCalendario();
     }
+
+    /**
+     * Obtiene la matriz con todas las rondas y sus enfrentamientos.
+     *
+     * @return Matriz de enfrentamientos por ronda.
+     */
 
     public Enfrentamiento[][] obtenerRondas() {
         return rondas;
     }
 
+    /**
+     * Obtiene la ronda actual en curso.
+     *
+     * @return Índice de la ronda actual.
+     */
+
     public int obtenerRondaActual() {
         return rondaActual;
     }
+
+    /**
+     * Obtiene el número total de rondas que tendrá el torneo.
+     *
+     * @return Número total de rondas.
+     */
 
     public int obtenerNumRondas() {
         return numRondas;

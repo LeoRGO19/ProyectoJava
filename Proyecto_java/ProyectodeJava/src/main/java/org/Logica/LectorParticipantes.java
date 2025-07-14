@@ -6,7 +6,44 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase utilitaria para leer participantes desde un archivo de texto.
+ * <p>
+ * El archivo puede contener individuos y equipos. Los individuos se especifican con líneas
+ * que contienen nombre, apellido, edad y opcionalmente correo. Los equipos se forman a partir
+ * de grupos de individuos separados por líneas que contienen sólo el carácter '%'.
+ * </p>
+ *
+ * <p>
+ * Si el archivo contiene al menos un separador '%', se interpretan los grupos de participantes
+ * como equipos. Si no hay separadores, todos los participantes se consideran individuos sueltos.
+ * </p>
+ */
+
 public class LectorParticipantes {
+
+    /**
+     * Lee participantes desde un archivo en la ruta especificada.
+     * <p>
+     * El formato esperado por línea es:
+     * <ul>
+     *     <li>Para participantes individuales: "Nombre Apellido Edad [Correo]"</li>
+     *     <li>Para separar equipos: una línea con sólo "%"</li>
+     * </ul>
+     * <p>
+     * Los equipos se forman con los participantes entre separadores '%'.
+     * Si no hay separadores, todos se consideran individuos.
+     * </p>
+     *
+     * @param rutaArchivo La ruta del archivo de texto que contiene los participantes.
+     * @return Una lista con dos listas internas:
+     *         <ul>
+     *           <li>En la posición 0, la lista de participantes individuales.</li>
+     *           <li>En la posición 1, la lista de equipos.</li>
+     *         </ul>
+     * @throws TorneoException Si el formato del archivo es inválido o hay errores al crear participantes.
+     */
+
     public static List<List<Participante>> leerParticipantes(String rutaArchivo) throws TorneoException {
 
         List<Participante> individuos = new ArrayList<>();
