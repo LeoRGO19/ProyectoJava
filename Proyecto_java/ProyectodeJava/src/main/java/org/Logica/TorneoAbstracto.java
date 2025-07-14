@@ -154,14 +154,9 @@ public abstract class TorneoAbstracto {
     }
 
     /**
-     * Inicia el torneo si hay al menos dos participantes registrados.
+     * Inicia el torneo si hay al menos dos participantes.
      *
-     * @throws TorneoException Si no hay suficientes participantes para iniciar.
-     */
-
-    /**
-     * Registra un observador para recibir notificaciones de eventos.
-     *
+     * @throws TorneoException si hay menos de 2 participantes al momento de iniciar.
      */
 
     protected void iniciarTorneo() throws TorneoException {

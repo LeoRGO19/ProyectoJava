@@ -11,6 +11,8 @@ import org.Logica.*;
  */
 public class Main {
 
+    /** Constructor por defecto */
+    public Main(){}
     /**
      * Método principal que ejecuta la simulación básica.
      *

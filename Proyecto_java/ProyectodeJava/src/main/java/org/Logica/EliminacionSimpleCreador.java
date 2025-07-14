@@ -19,6 +19,8 @@ package org.Logica;
  */
 public class EliminacionSimpleCreador extends Creador {
 
+    /** Constructor por default */
+    public EliminacionSimpleCreador(){}
     /**
      * Crea una nueva instancia de {@link TorneoEliminacionSimple} con los parámetros especificados.
      *

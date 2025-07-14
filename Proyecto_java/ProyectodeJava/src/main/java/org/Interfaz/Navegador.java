@@ -14,7 +14,8 @@ import java.util.Stack;
  * una palabra clave y la instancia del torneo creado.
  */
 public class Navegador {
-
+    /** Constructor por defecto */
+    public Navegador(){}
     /**
      * Pila (stack) que almacena los paneles visitados, permitiendo retroceder
      * a paneles anteriores.

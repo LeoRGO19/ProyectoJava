@@ -10,7 +10,8 @@ import org.Logica.*;
  * </p>
  */
 public class MainLiga {
-
+    /** Constructor por defecto */
+    public MainLiga(){}
     /**
      * Método principal que ejecuta la simulación del torneo de liga.
      * <p>

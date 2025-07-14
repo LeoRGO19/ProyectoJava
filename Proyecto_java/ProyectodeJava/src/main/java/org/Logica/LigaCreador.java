@@ -7,6 +7,8 @@ package org.Logica;
  * </p>
  */
 public class LigaCreador extends Creador {
+    /** Constructor por defecto */
+    public LigaCreador(){}
 
     /**
      * Crea un torneo de tipo Liga con el nombre, disciplina y máximo de participantes especificados.

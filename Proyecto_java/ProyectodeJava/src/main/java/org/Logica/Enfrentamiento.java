@@ -70,12 +70,61 @@ public class Enfrentamiento {
 
     /* Getters y setters */
 
+    /**
+     * Obtiene el estado actual del enfrentamiento.
+     *
+     * @return Un entero que representa el estado:
+     *         <ul>
+     *           <li>0: Pendiente</li>
+     *           <li>1: En curso</li>
+     *           <li>2: Terminado</li>
+     *         </ul>
+     */
     public int obtenerEstado() {return estado;}
+
+    /**
+     * Establece la fecha y hora programada para el enfrentamiento.
+     *
+     * @param fecha instancia de {@link java.time.LocalDateTime} que indica cuándo está programado el encuentro.
+     */
     public void establecerFecha(LocalDateTime fecha) {this.fecha = fecha;}
+
+    /**
+     * Devuelve la fecha correspondiente.
+     *
+     * @return fecha correspondiente al momento.
+     */
     public LocalDateTime obtenerFecha() {return fecha;}
+
+    /**
+     * Devuelve el PRIMER participante del enfrentamiento.
+     *
+     * @return objeto Participante correspondiente al primer jugador o equipo.
+     */
     public Participante obtenerParticipante1() {return p1;}
+
+    /**
+     * Devuelve el segundo participante del enfrentamiento.
+     *
+     * @return objeto Participante correspondiente al segundo jugador o equipo.
+     */
     public Participante obtenerParticipante2() {return p2;}
+
+    /**
+     * Devuelve el puntaje actual del primer participante en el enfrentamiento.
+     *
+     * @return Entero que representa la cantidad de puntos acumulados por el participante 1.
+     */
     public int obtenerPuntaje1() {return puntaje1;}
+
+
+    /**
+     * Obtiene el puntaje del segundo participante.
+     *
+     * @return el puntaje actual de {@code p2}.
+     */
+
+
     public int obtenerPuntaje2() {return puntaje2;}
 
     /**

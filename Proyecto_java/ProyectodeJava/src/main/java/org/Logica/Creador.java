@@ -8,6 +8,9 @@ package org.Logica;
  */
 public abstract class Creador {
 
+    /** Constructor por default */
+    public Creador(){}
+
     /**
      * Valida los parámetros necesarios para crear un torneo.
      *

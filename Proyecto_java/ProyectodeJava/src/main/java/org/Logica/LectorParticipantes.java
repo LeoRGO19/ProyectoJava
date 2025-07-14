@@ -20,7 +20,14 @@ import java.util.List;
  * </p>
  */
 
+
+/**
+ * Constructor por defecto para RegistradorTorneo.
+ */
 public class LectorParticipantes {
+
+    /** Constructor por defecto */
+    public LectorParticipantes(){}
 
     /**
      * Lee participantes desde un archivo en la ruta especificada.

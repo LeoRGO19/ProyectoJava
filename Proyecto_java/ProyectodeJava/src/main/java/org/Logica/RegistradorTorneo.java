@@ -1,5 +1,7 @@
 package org.Logica;
 
+import org.w3c.dom.ls.LSOutput;
+
 /**
  * Implementación de {@link ObservadorTorneo} que registra eventos de un torneo
  * imprimiendo mensajes en la consola.
@@ -10,7 +12,8 @@ package org.Logica;
  */
 
 public class RegistradorTorneo implements ObservadorTorneo {
-
+    /** constructor por defecto */
+    public RegistradorTorneo(){}
     /**
      * Procesa la notificación de un evento del torneo imprimiendo detalles en la consola.
      *

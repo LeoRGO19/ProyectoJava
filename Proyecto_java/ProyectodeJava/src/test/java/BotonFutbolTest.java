@@ -11,11 +11,17 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Test para corroborar el funcionamiento de BotonFutbol */
+
 public class BotonFutbolTest {
 
     private BotonFutbol boton;
     private JFrame dummyFrame;
 
+    /** Constructor por default */
+    public BotonFutbolTest(){}
+
+    /** Elementos necesarios antes de la prueba */
     @BeforeEach
     public void setUp() {
         dummyFrame = new JFrame(); // No se mostrará, solo para cumplir con el constructor

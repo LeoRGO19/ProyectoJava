@@ -10,6 +10,10 @@ import org.Logica.*;
  * </p>
  */
 public class MainEliminacionSimple {
+    /** Constructor por defecto */
+    public MainEliminacionSimple(){
+    }
+
 
     /**
      * Método principal que ejecuta la simulación del torneo de eliminación simple.
