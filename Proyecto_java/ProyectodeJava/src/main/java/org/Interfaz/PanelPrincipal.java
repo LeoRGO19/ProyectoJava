@@ -83,9 +83,8 @@ public class PanelPrincipal extends PanelBase {
 
         botonInscribirEnTorneo.addActionListener(e -> {
             try {
-                List<List<Participante>> resultado = LectorParticipantes.leerParticipantes("C:/Users/Canito301/Downloads/participantes2.txt");
-                ArrayList<Participante> individuos = new ArrayList<>(resultado.get(0));
-                ((TorneoAbstracto) Navegador.torneo).agregarParticipantesDesdeLista(individuos);
+                ArrayList<Participante> resultado = LectorParticipantes.leerParticipantes("usuarios.txt");
+                ((TorneoAbstracto) Navegador.torneo).agregarParticipantesDesdeLista(resultado);
 
                 for (Participante d : ((TorneoAbstracto) Navegador.torneo).obtenerParticipantes()) {
                     System.out.println(d);
