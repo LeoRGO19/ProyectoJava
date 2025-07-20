@@ -3,359 +3,230 @@ package org.Logica;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-/**
- * Representa un enfrentamiento entre dos {@link Participante}s dentro de un torneo
- * controlado por un {@link SujetoTorneo}.
- *
- * <p>Simula el desarrollo del partido según la disciplina del torneo,
- * actualiza puntajes, resuelve empates con tiempo extra y notifica a los
- * observadores del torneo cada vez que ocurre un cambio relevante.</p>
- *
- * <ol>
- *   <li>El enfrentamiento se crea en estado <em>Pendiente</em>.</li>
- *   <li>Se establece una fecha programada (opcional).</li>
- *   <li>Al invocar {@link #iniciarEncuentro()}, el estado pasa a <em>En curso</em>
- *       y se simula la duración reglamentaria.</li>
- *   <li>Si hay empate, se llama a {@link #resolverEmpate()} para tiempo extra.</li>
- *   <li>Finalmente se asigna un ganador con {@link #asignarGanador()} y el estado pasa a <em>Terminado</em>.</li>
- * </ol>
- *
- * <p>Los puntajes máximos por jugada varían según la disciplina (Fútbol, Valorant, etc.);
- * véase {@link #obtenerPuntosPorDisciplina(Random)}.</p>
- *
- * @author Canito301, LeoRGO19
- *
- */
-
 public class Enfrentamiento {
-    private Participante p1;
-    private Participante p2;
+    private Participante p1, p2;
+    private int puntaje1 = 0, puntaje2 = 0;
+    private boolean terminoEncuentro = false;
 
-    private int puntaje1 = 0;
-    private int puntaje2 = 0;
-    private int duracionPrevista = 2;
-    private int estado = 0; // 0: Pendiente, 1: En curso, 2: Terminado
-
-    private float duracion;   
-
-    boolean resultadoP1 = false;
-    boolean resultadoP2 = false;
-    boolean terminoEncuentro = false;
-
-
-    private LocalTime inicio;
-    private LocalTime fin;
     private LocalDateTime fecha;
+    private LocalTime inicio, fin;
+    private float duracion;
 
-    private SujetoTorneo torneo;
+    private final GestorEstadoEncuentro estado;
+    private final GestorNotificaciones notificador;
+    private final SimuladorPuntaje simulador;
+    private final Disciplina disciplina;
+    private final Random rand = new Random();
 
-
-    /* Constructores       */
-
-    /**
-     * Crea un enfrentamiento entre dos participantes asociado a un torneo.
-     *
-     * @param n1     Primer participante.
-     * @param n2     Segundo participante.
-     * @param torneo Instancia del torneo al que pertenece (utilizado para notificaciones).
-     */
-    public Enfrentamiento(Participante n1, Participante n2, Torneo torneo){
-        this.p1 = n1;
-        this.p2 = n2;
-        this.torneo = (SujetoTorneo) torneo;
+    public Enfrentamiento(Participante p1, Participante p2, Torneo torneo) {
+        this.p1 = p1;
+        this.p2 = p2;
+        this.estado = new GestorEstadoEncuentro();
+        this.notificador = new GestorNotificaciones((SujetoTorneo) torneo);
+        this.simulador = new SimuladorPuntaje();
+        this.disciplina = ((TorneoAbstracto) torneo).disciplina;
     }
 
-    /* Getters y setters */
-
-    /**
-     * Obtiene el estado actual del enfrentamiento.
-     *
-     * @return Un entero que representa el estado:
-     *         <ul>
-     *           <li>0: Pendiente</li>
-     *           <li>1: En curso</li>
-     *           <li>2: Terminado</li>
-     *         </ul>
-     */
-    public int obtenerEstado() {return estado;}
-
-    /**
-     * Establece la fecha y hora programada para el enfrentamiento.
-     *
-     * @param fecha instancia de {@link java.time.LocalDateTime} que indica cuándo está programado el encuentro.
-     */
-    public void establecerFecha(LocalDateTime fecha) {this.fecha = fecha;}
-
-    /**
-     * Devuelve la fecha correspondiente.
-     *
-     * @return fecha correspondiente al momento.
-     */
-    public LocalDateTime obtenerFecha() {return fecha;}
-
-    /**
-     * Devuelve el PRIMER participante del enfrentamiento.
-     *
-     * @return objeto Participante correspondiente al primer jugador o equipo.
-     */
-    public Participante obtenerParticipante1() {return p1;}
-
-    /**
-     * Devuelve el segundo participante del enfrentamiento.
-     *
-     * @return objeto Participante correspondiente al segundo jugador o equipo.
-     */
-    public Participante obtenerParticipante2() {return p2;}
-
-    /**
-     * Devuelve el puntaje actual del primer participante en el enfrentamiento.
-     *
-     * @return Entero que representa la cantidad de puntos acumulados por el participante 1.
-     */
-    public int obtenerPuntaje1() {return puntaje1;}
-
-
-    /**
-     * Obtiene el puntaje del segundo participante.
-     *
-     * @return el puntaje actual de {@code p2}.
-     */
-
-
-    public int obtenerPuntaje2() {return puntaje2;}
-
-    /**
-     * Notifica a los observadores del torneo que los resultados han sido actualizados.
-     */
-
-    private void notificarActualizacion() {
-        if (torneo != null) {
-            torneo.notificarObservadores(TipoEvento.RESULTADOS_ACTUALIZADOS, this);
-        }
+    public void establecerFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
-    /**
-     * Inicia la simulación del enfrentamiento.
-     * Respeta la {@code fecha} programada (espera si es futura), notifica estados
-     * y resuelve automáticamente empates con tiempo extra.
-     */
+    public LocalDateTime obtenerFecha() {
+        return fecha;
+    }
+
+    public int obtenerEstado() {
+        return estado.obtenerEstado();
+    }
+
+    public Participante obtenerParticipante1() {
+        return p1;
+    }
+
+    public Participante obtenerParticipante2() {
+        return p2;
+    }
+
+    public int obtenerPuntaje1() {
+        return puntaje1;
+    }
+
+    public int obtenerPuntaje2() {
+        return puntaje2;
+    }
 
     public void iniciarEncuentro() {
         if (terminoEncuentro) return;
-        LocalDateTime ahora = LocalDateTime.now();
-        if (fecha != null && ahora.isBefore(fecha)) {
-            long segundosEspera = Duration.between(ahora, fecha).getSeconds();
-            if (segundosEspera > 0) {
-                try {
-                    System.out.println("Esperando " + segundosEspera + " segundos para iniciar " + this);
-                    Thread.sleep(segundosEspera * 1000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+
+        puntaje1 = 0;
+        puntaje2 = 0;
+        terminoEncuentro = false;
+
+        esperarSiHayFechaProgramada();
+        estado.iniciar();
+        inicio = LocalTime.now();
+
+        if (disciplina == Disciplina.VALORANT || disciplina == Disciplina.CSGO) {
+            simularHastaMeta(13);
+        } else if (disciplina == Disciplina.TENISDEMESA) {
+            simularHastaMeta(11);
+        } else if (disciplina == Disciplina.TENIS) {
+            simularHastaMeta(6);
+        }else {
+            simularDuracion();
+        }
+
+        // Resolver empate en deportes que usan simularHastaMeta o simularDuracion
+        if (puntaje1 == puntaje2) {
+            while (puntaje1 == puntaje2) {
+                puntaje1 += simulador.simularSimple();
+                puntaje2 += simulador.simularSimple();
+                notificador.notificarResultadosActualizados(this);
+                dormir(1000);
+            }
+        }
+
+        estado.terminar();
+        terminoEncuentro = true;
+        fin = LocalTime.now();
+        duracion = Duration.between(inicio, fin).toSeconds();
+        notificador.notificarResultadosActualizados(this);
+
+        System.out.println("Victoria de " + obtenerGanador().obtenerNombre());
+    }
+
+    private void simularHastaMeta(int meta) {
+        while (true) {
+            int puntajeTurnoP1 = rand.nextInt(100);
+            int puntajeTurnoP2 = rand.nextInt(100);
+
+            if (puntajeTurnoP1 > puntajeTurnoP2) {
+                puntaje1++;
+            } else if (puntajeTurnoP2 > puntajeTurnoP1) {
+                puntaje2++;
+            }
+
+            if (meta == 11) {
+                if ((puntaje1 >= 11 || puntaje2 >= 11) && Math.abs(puntaje1 - puntaje2) >= 2) {
+                    break;
+                }
+            } else if (meta == 13) {
+                if ((puntaje1 >= 13 || puntaje2 >= 13) && Math.abs(puntaje1 - puntaje2) >= 2) {
+                    break;
+                }
+            } else if  (meta ==6) {
+                if ((puntaje1 >= 6 || puntaje2 >= 6) && Math.abs(puntaje1 - puntaje2) >= 2){
+                    break;
+                }
+                if ((puntaje1 == 7 && puntaje2 == 6) || (puntaje1 == 6 && puntaje2 == 7)){
+                    break;
                 }
             }
-        }
-        estado = 1; // En curso
-        inicio = LocalTime.now();
-        int temp1 = 0;
-        int temp2 = 0;
-        Random r = new Random();
-        int tiempo = 0;
-        System.out.println(p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
-        while (tiempo < duracionPrevista) {
-            temp1 = puntaje1;
-            temp2 = puntaje2;
-            Boolean turno = r.nextBoolean();
-            int posiblesPuntos = obtenerPuntosPorDisciplina(r);
-            if (turno) {this.puntaje1 += simularPuntaje(posiblesPuntos);} else {this.puntaje2 += simularPuntaje(posiblesPuntos);}
-            notificarActualizacion();
-            if (posiblesPuntos > 0 && ( temp1 < puntaje1 || temp2 < puntaje2 )) {
-                System.out.println(p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
-                notificarActualizacion();
+
+
+            else {
+                if (puntaje1 >= meta || puntaje2 >= meta) {
+                    break;
+                }
             }
-            tiempo = (int)Duration.between(inicio, LocalTime.now()).getSeconds();
+
+            notificador.notificarResultadosActualizados(this);
+            dormir(1500);
         }
 
-        System.out.println("Tiempo reglamentario terminado");
-        System.out.println(p1 + ": " + puntaje1 + " - " + puntaje2 + " : " + p2);
-
-        if (puntaje1 == puntaje2) {
-            System.out.println("Empate detectado. Iniciando tiempo extra...");
-            resolverEmpate();
-        } else {
-            asignarGanador();
-            estado = 2;
-            this.terminoEncuentro = true;
-        }
-
-        notificarActualizacion();
-        System.out.println("victoria de " + obtenerGanador());
-        this.fin = LocalTime.now();
-        this.duracion = getDuracion();
-
+        notificador.notificarResultadosActualizados(this);
     }
 
-    /**
-     * Devuelve la cantidad máxima de puntos que se pueden anotar en una jugada,
-     * dependiendo de la disciplina del torneo.
-     *
-     * @param r Instancia de {@link Random} para generar valores aleatorios.
-     * @return  Número máximo de puntos posibles.
-     */
-
-    private int obtenerPuntosPorDisciplina(Random r) {
-        Disciplina disciplina = ((TorneoAbstracto) torneo).disciplina;
+    private void simularDuracion() {
         switch (disciplina) {
             case FUTBOL:
-                return r.nextInt(2);
             case FIFA:
-                return r.nextInt(2); // 0 o 1 punto
-            case BASKETBALL:
-                return r.nextInt(4); // 0, 1, 2 o 3 puntos
-            case TIROCONARCO:
-                return r.nextInt(11); // 0 a10 puntos
-            case VALORANT:
-                return r.nextInt(2);
-            case CSGO:
-                return r.nextInt(2);
             case ROCKETLEAGUE:
-                return r.nextInt(3); // 0, 1 o 2 puntos
-            default:
-                return r.nextInt(2); // Por defecto, 0 o 1 punto
-        }
-    }
+                for (int i = 0; i < 90; i++) {
+                    boolean turnoP1 = rand.nextBoolean();
+                    int puntos = simulador.simularFutbol();
+                    if (turnoP1) puntaje1 += puntos;
+                    else puntaje2 += puntos;
 
-    /**
-     * Simula la obtención de puntos en una jugada, durmiendo brevemente para
-     * imitar el paso del tiempo.
-     *
-     * @param puntosMaximos Valor máximo de puntos posibles en la jugada.
-     * @return Puntos conseguidos (0 .. puntosMaximos).
-     */
-
-    private int simularPuntaje(int puntosMaximos) {
-        Random r = new Random();
-        int puntos = 0;
-        for (int i = 0; i < puntosMaximos; i++) {
-            try {
-                int minutosSimulados = 1 + r.nextInt(3); // puede durar de 1 a 5 min para posiblemente sumar puntos
-                Thread.sleep(minutosSimulados * 1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            if (r.nextBoolean()) {
-                puntos++;
-            }
-        }
-
-        return puntos;
-    }
-
-    /**
-     * Resuelve un empate agregando tiempo extra hasta que haya un ganador.
-     */
-
-    private void resolverEmpate() {
-        Random r = new Random();
-        while (puntaje1 == puntaje2) {
-            duracionPrevista += 3;
-            try {
-                Thread.sleep(1000*(1 + r.nextInt(3)));
-
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            int posiblesPuntos = obtenerPuntosPorDisciplina(r);
-            if (r.nextBoolean()) {
-                puntaje1 += simularPuntaje(posiblesPuntos);
-            } else {
-                puntaje2 += simularPuntaje(posiblesPuntos);
-            }
-            if (puntaje1 != puntaje2) {
+                    notificador.notificarResultadosActualizados(this);
+                    dormir(1000);
+                }
                 break;
+
+            case BASKETBALL:
+                for (int i = 0; i < 70; i++) {
+                    boolean turnoP1 = rand.nextBoolean();
+                    int puntos = simulador.simularBasketball();
+                    if (turnoP1) puntaje1 += puntos;
+                    else puntaje2 += puntos;
+
+                    notificador.notificarResultadosActualizados(this);
+                    dormir(1000);
+                }
+                break;
+
+            case TIROCONARCO:
+                for (int i = 0; i < 10; i++) {
+                    puntaje1 += simulador.simularTiroConArco();
+                    puntaje2 += simulador.simularTiroConArco();
+
+                    notificador.notificarResultadosActualizados(this);
+                    dormir(2000);
+                }
+                if (puntaje1 == puntaje2) {
+                    while (puntaje1 == puntaje2) {
+                        puntaje1 += simulador.simularTiroConArco();
+                        puntaje2 += simulador.simularTiroConArco();
+
+                        notificador.notificarResultadosActualizados(this);
+                        dormir(1000);
+                    }
+                }
+                break;
+
+            default:
+                for (int i = 0; i < 30; i++) {
+                    boolean turnoP1 = rand.nextBoolean();
+                    int puntos = simulador.simularSimple();
+                    if (turnoP1) puntaje1 += puntos;
+                    else puntaje2 += puntos;
+
+                    notificador.notificarResultadosActualizados(this);
+                    dormir(1000);
+                }
+                break;
+        }
+    }
+
+    private void esperarSiHayFechaProgramada() {
+        if (fecha != null && LocalDateTime.now().isBefore(fecha)) {
+            try {
+                Thread.sleep(Duration.between(LocalDateTime.now(), fecha).toMillis());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
-        asignarGanador();
-        estado = 2;
-        notificarActualizacion();
-        System.out.println("Tiempo extra: " + p1 + " " + puntaje1 + " - " + puntaje2 + " " + p2);
-        this.terminoEncuentro = true;
     }
-
-    /**
-     * Asigna el ganador del encuentro según los puntajes alcanzados.
-     */
-
-    private void asignarGanador() {
-        if (puntaje1 > puntaje2) {
-            resultadoP1 = true;
-        } else {
-            resultadoP2 = true;
-        }
-    }
-
-    /**
-     * Obtiene el {@link Participante} ganador si el encuentro ha finalizado.
-     *
-     * @return Ganador, o {@code null} si aún no hay resultado definitivo.
-     */
 
     public Participante obtenerGanador() {
-        if (terminoEncuentro) {
-            if (resultadoP1) {
-                return p1;
-            } else if (resultadoP2) {
-                return p2;
-            }
-        }
-        return null;
+        if (!terminoEncuentro) return null;
+        return (puntaje1 > puntaje2) ? p1 : p2;
     }
-
-    /**
-     * Obtiene el perdedor del encuentro si ha finalizado.
-     *
-     * @return Perdedor, o {@code null} si el encuentro no ha concluido.
-     */
 
     public Participante obtenerPerdedor() {
-        if (terminoEncuentro) {
-            if (resultadoP1) {
-                return p2;
-            } else if (resultadoP2) {
-                return p1;
-            }
-        }
-        return null;
+        if (!terminoEncuentro) return null;
+        return (puntaje1 > puntaje2) ? p2 : p1;
     }
-
-    /**
-     * Devuelve la duración total, en segundos, del encuentro completado.
-     *
-     * @return Duración en segundos, o 0 si no se ha finalizado.
-     */
 
     public int getDuracion() {
-        if (inicio == null || fin == null) {
-            return 0;
-        }
-        return (int) Duration.between(inicio, fin).getSeconds();
+        return (int) duracion;
     }
 
-    /**
-     * Indica si el enfrentamiento ya terminó.
-     *
-     * @return {@code true} si finalizó, de lo contrario {@code false}.
-     */
-
-    public boolean haTerminadoEncuentro(){
+    public boolean haTerminadoEncuentro() {
         return terminoEncuentro;
     }
-
-    /**
-     * Muestra en consola los detalles actuales del enfrentamiento (puntajes, ganador, duración).
-     */
 
     public void verEnfrentamiento() {
         Participante ganador = obtenerGanador();
@@ -364,23 +235,20 @@ public class Enfrentamiento {
         System.out.println(p1.obtenerNombre() + " " + puntaje1 + " - " + puntaje2 + " " + p2Nombre);
         System.out.println("Ganador: " + ganadorStr);
         System.out.println("Duración: " + (terminoEncuentro ? (int) duracion : 0));
-        if (fecha != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-            System.out.println("Programado para: " + fecha.format(formatter));
-        }
     }
-
-    /**
-     *Representación textual: muestra participantes y la fecha programada.
-     *
-     * @return Cadena descriptiva del enfrentamiento.
-     */
 
     @Override
     public String toString() {
         String p2Nombre = (p2 != null) ? p2.obtenerNombre() : "BYE";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        String fechaFormateada = (fecha != null) ? fecha.format(formatter) : "Sin fecha";
+        String fechaFormateada = (fecha != null) ? fecha.toString() : "Sin fecha";
         return p1.obtenerNombre() + " vs " + p2Nombre + " (Programado para: " + fechaFormateada + ")";
+    }
+
+    private void dormir(int milisegundos) {
+        try {
+            Thread.sleep(milisegundos);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
