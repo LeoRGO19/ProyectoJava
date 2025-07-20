@@ -1,6 +1,6 @@
 package org.Interfaz;
 
-import org.Logica.*;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,17 +81,15 @@ public class PanelPrincipal extends PanelBase {
         botonInscribirEnTorneo.setBounds(1115, 170, 200, 40);
         panel.add(botonInscribirEnTorneo);
 
-        botonInscribirEnTorneo.addActionListener(e -> {
-            try {
-                ArrayList<Participante> resultado = LectorParticipantes.leerParticipantes("usuarios.txt");
-                ((TorneoAbstracto) Navegador.torneo).agregarParticipantesDesdeLista(resultado);
 
-                for (Participante d : ((TorneoAbstracto) Navegador.torneo).obtenerParticipantes()) {
-                    System.out.println(d);
-                }
-            } catch (TorneoException ex) {
-                throw new RuntimeException(ex);
-            }
+
+        botonInscribirEnTorneo.addActionListener(e -> {
+            PanelInscripcion panelInscripcion = new PanelInscripcion(frame);
+            panelInscripcion.setImagenFondo("/fondoprincipal.jpg");
+            Navegador.historial.push(new PanelPrincipal(frame)); // Guardar estado actual
+            frame.setContentPane(panelInscripcion.obtenerPanel());
+            frame.revalidate();
+            frame.repaint();
         });
 
         // Botón Observar Torneo

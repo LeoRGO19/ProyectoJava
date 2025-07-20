@@ -90,13 +90,19 @@ public abstract class TorneoAbstracto {
      *                         o se ha alcanzado el máximo de participantes.
      */
 
-    protected void agregarParticipante(Participante p) throws TorneoException {
+    public void agregarParticipante(Participante p) throws TorneoException {
         if (torneoIniciado) {
             throw new TorneoException("No se pueden agregar participantes una vez iniciado el torneo.");
         }
         if (p == null) {
             throw new TorneoException("El participante no puede ser nulo.");
         }
+        if (!this.obtenerParticipantes().isEmpty()) {
+            if ((p instanceof Equipo && this.obtenerParticipantes().getFirst() instanceof IndividuoParticipante)||(p instanceof IndividuoParticipante && this.obtenerParticipantes().getFirst() instanceof Equipo)) {
+                throw new TorneoException("El tipo de participante a ingresar es incompatible con los que ya hay");
+            }
+        }
+
         if (participantes.size() >= maxParticipantes) {
             throw new TorneoException("No se pueden agregar más participantes: límite de " + maxParticipantes + " alcanzado.");
         }
@@ -112,7 +118,7 @@ public abstract class TorneoAbstracto {
      *                         o el participante no está registrado.
      */
 
-    protected void eliminarParticipante(Participante p) throws TorneoException {
+    public void eliminarParticipante(Participante p) throws TorneoException {
         if (torneoIniciado) {
             throw new TorneoException("No se pueden eliminar participantes una vez iniciado el torneo.");
         }
