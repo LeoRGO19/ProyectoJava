@@ -11,7 +11,6 @@ import java.awt.*;
  * <p>Este botón está diseñado para integrarse con la interfaz del sistema de torneos,
  * mostrando el {@link PanelCalendario} cuando es activado.</p>
  *
- * @author TuNombre
  */
 public class BotonCalendario extends BotonBase {
 

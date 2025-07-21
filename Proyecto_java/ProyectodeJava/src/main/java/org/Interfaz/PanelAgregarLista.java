@@ -5,26 +5,42 @@ import org.Logica.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+/**
+ * Panel que permite agregar una lista de participantes a un torneo desde un archivo.
+ * Extiende {@link PanelBase} y proporciona un formulario para seleccionar el número y tipo de participantes,
+ * así como un área para visualizar la lista de participantes agregados.
+ */
 public class PanelAgregarLista extends PanelBase {
     /**
-     * Constructor que inicializa el panel base con el JFrame dado.
-     * Crea un JPanel con layout nulo y sobreescribe paintComponent para pintar la imagen de fondo.
+     * Constructor que inicializa el panel agregar lista con el JFrame principal.
+     * Configura el panel.
      *
-     * @param frame el JFrame contenedor donde se mostrará este panel.
+     * @param frame el JFrame donde se mostrará este panel.
      */
     public PanelAgregarLista(JFrame frame) {
         super(frame);
         configurar();
         agregarComponentes();
     }
-
+    /**
+     * Configura las propiedades visuales del panel:
+     * - Layout nulo para posicionamiento manual.
+     * - Color de fondo morado oscuro.
+     */
     @Override
     public void configurar() {
         panel.setLayout(null);
         panel.setBackground(new Color(70, 45, 90));
     }
-
+    /**
+     * Agrega los componentes gráficos al panel, incluyendo:
+     * - Etiqueta y combo box para seleccionar la cantidad de participantes.
+     * - Radio buttons para elegir entre individuos o equipos.
+     * - Área de texto para mostrar los participantes agregados.
+     * - Botón para agregar la lista desde un archivo.
+     * - Botón para volver al panel anterior.
+     * También inicia un temporizador para actualizar dinámicamente la lista de participantes.
+     */
     @Override
     public void agregarComponentes() {
         // Etiqueta para el número de participantes
@@ -114,7 +130,7 @@ public class PanelAgregarLista extends PanelBase {
                 JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error de entrada", JOptionPane.ERROR_MESSAGE);
             }
         });
-
+    // Temporizador para actualizar el área de participantes
     new Timer(500, e -> {
     StringBuilder texto = new StringBuilder();
     for (Participante p : ((TorneoAbstracto) Navegador.torneo).obtenerParticipantes()) {
@@ -130,7 +146,11 @@ public class PanelAgregarLista extends PanelBase {
     }).start();
         panel.add(new BotonVolver(frame));
     }
-
+    /**
+     * Obtiene el {@link JPanel} principal que contiene todos los componentes del panel.
+     *
+     * @return el {@link JPanel} configurado con los componentes
+     */
     @Override
     public JPanel obtenerPanel() {
         return panel;

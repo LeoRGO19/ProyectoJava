@@ -5,7 +5,10 @@ import org.Logica.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+/**
+ * Panel que permite agregar participantes individuales o equipos a un torneo mediante un formulario.
+ * Extiende {@link PanelBase} y proporciona campos para ingresar información del participante y un área para visualizar los participantes agregados.
+ */
 public class PanelFormularioParticipante extends PanelBase{
 
     private ArrayList<Participante> participantesEntrada = new ArrayList<>();
@@ -25,21 +28,34 @@ public class PanelFormularioParticipante extends PanelBase{
 
     private int cantidadPorEquipo;
     /**
-     * Constructor que inicializa el panel base con el JFrame dado.
-     * Crea un JPanel con layout nulo y sobreescribe paintComponent para pintar la imagen de fondo.
+     * Constructor que inicializa el panel formulario participante con el JFrame principal.
+     * Configura el panel.
      *
-     * @param frame el JFrame contenedor donde se mostrará este panel.
+     * @param frame el JFrame donde se mostrará este panel.
      */
     public PanelFormularioParticipante(JFrame frame) {
         super(frame);
         configurar();
         agregarComponentes();
     }
+    /**
+     * Configura las propiedades visuales del panel, incluyendo el layout y el color de fondo.
+     */
     @Override
     public void configurar() {
         panel.setLayout(null);
         panel.setBackground(new Color(70, 45, 90));
     }
+    /**
+     * Agrega los componentes gráficos al panel, incluyendo:
+     * - Campos de texto para nombre, apellido, edad y contacto.
+     * - Radio buttons para elegir entre participantes individuales o equipos.
+     * - Campo para especificar la cantidad de miembros por equipo (si aplica).
+     * - Área de texto para mostrar los participantes agregados.
+     * - Botón para agregar el participante o equipo.
+     * - Botón para volver al panel anterior.
+     * También inicia un temporizador para actualizar dinámicamente la lista de participantes.
+     */
     @Override
     public void agregarComponentes() {
         JLabel lblNombre = new JLabel("Nombre:");
@@ -128,7 +144,6 @@ public class PanelFormularioParticipante extends PanelBase{
             lblCantidadPorEquipo.setVisible(((TorneoAbstracto) Navegador.torneo).obtenerParticipantes().isEmpty() && rbEquipos.isSelected());
             campoCantidadPorEquipo.setVisible(((TorneoAbstracto) Navegador.torneo).obtenerParticipantes().isEmpty() && rbEquipos.isSelected());
         });
-        // Botón Submit
 
         JButton botonSubmit = new JButton("Agregar");
         botonSubmit.setBackground(new Color(40, 40, 40));
@@ -140,8 +155,6 @@ public class PanelFormularioParticipante extends PanelBase{
         botonSubmit.setBounds(600, 450, 200, 30);
         panel.add(botonSubmit);
 
-
-        // Acción del botón
         botonSubmit.addActionListener(e -> {
             String nombre = campoNombre.getText().trim();
             String apellido = campoApellido.getText().trim();
@@ -233,7 +246,11 @@ public class PanelFormularioParticipante extends PanelBase{
         }).start();
         panel.add(new BotonVolver(frame));
     }
-
+    /**
+     * Obtiene el {@link JPanel} principal que contiene todos los componentes del panel.
+     *
+     * @return el {@link JPanel} configurado con los componentes
+     */
     @Override
     public JPanel obtenerPanel() {
         return panel;

@@ -16,10 +16,6 @@ public abstract class TorneoAbstracto {
 
     protected String nombre;
 
-    public String obtenerNombre(){
-        return nombre;
-    }
-
     /** Disciplina del torneo */
 
     protected Disciplina disciplina;
@@ -43,16 +39,13 @@ public abstract class TorneoAbstracto {
     /** Indica si el torneo ha sido iniciado */
 
     protected boolean torneoIniciado;
-    public boolean haIniciado(){
-        return torneoIniciado;
-    }
 
     /**
-     * Constructor que inicializa el torneo con nombre, disciplina y máximo de participantes.
+     * Constructor que inicializa el torneo con sus atributos básicos.
      *
-     * @param nombre          El nombre del torneo.
-     * @param disciplina      El nombre de la disciplina (convertido a {@link Disciplina}).
-     * @param maxParticipantes Número máximo de participantes permitidos.
+     * @param nombre          el nombre del torneo
+     * @param disciplina      el nombre de la disciplina (convertido a {@link Disciplina})
+     * @param maxParticipantes el número máximo de participantes permitidos
      */
 
     public TorneoAbstracto(String nombre, String disciplina, int maxParticipantes) {
@@ -70,11 +63,25 @@ public abstract class TorneoAbstracto {
      *
      * @return La lista de participantes.
      */
-
     public ArrayList<Participante> obtenerParticipantes() {
         return participantes;
     }
-
+    /**
+     * Obtiene el nombre del torneo.
+     *
+     * @return el atributo nombre.
+     */
+    public String obtenerNombre(){
+        return nombre;
+    }
+    /**
+     * Obtiene si torneo ha iniciado.
+     *
+     * @return el atributo torneoIniciado.
+     */
+    public boolean haIniciado(){
+        return torneoIniciado;
+    }
     /**
      * Configura los datos básicos del torneo.
      *
@@ -93,8 +100,8 @@ public abstract class TorneoAbstracto {
      * Agrega un participante al torneo.
      *
      * @param p El participante a agregar.
-     * @throws TorneoException Si el torneo ya fue iniciado, el participante es nulo,
-     *                         o se ha alcanzado el máximo de participantes.
+     * @throws TorneoException Si el torneo ya fue iniciado, el participante es nulo, o si se quiere ingresar participantes incompatibles,
+     * o si se quiere ingresar un participante que ya está, o se ha alcanzado el máximo de participantes.
      */
 
     public void agregarParticipante(Participante p) throws TorneoException {
@@ -127,7 +134,7 @@ public abstract class TorneoAbstracto {
      *
      * @param p El participante a eliminar.
      * @throws TorneoException Si el torneo ya fue iniciado, no hay participantes,
-     *                         o el participante no está registrado.
+     * o el participante no está registrado.
      */
 
     public void eliminarParticipante(Participante p) throws TorneoException {
@@ -151,7 +158,9 @@ public abstract class TorneoAbstracto {
      * Verifica que todos los participantes sean del mismo tipo (individuos o equipos).
      *
      * @param listaParticipantes La lista de participantes a agregar.
-     * @throws TorneoException Si la lista es nula, vacía o contiene mezcla de tipos.
+     * @throws TorneoException Si la lista es nula, vacía o contiene mezcla de tipos,
+     * o si quiere ingresar participantes incompatibles con los que hay,
+     * o si quiere ingresar participantes que ya están inscritos
      */
 
     public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {

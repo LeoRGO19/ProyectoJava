@@ -22,7 +22,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Este panel forma parte de la interfaz gráfica del sistema y extiende {@link PanelBase}.
  * </p>
  *
- * @author Tú :)
  */
 public class PanelCalendario extends PanelBase {
     private JPanel calendarioPanel;

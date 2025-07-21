@@ -4,25 +4,36 @@ import org.Logica.*;
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * Panel que permite eliminar un participante de un torneo.
+ * Extiende {@link PanelBase} y proporciona un combo box para seleccionar el participante a eliminar.
+ */
 public class PanelEliminarParticipante extends PanelBase{
-
     /**
-     * Constructor que inicializa el panel base con el JFrame dado.
-     * Crea un JPanel con layout nulo y sobreescribe paintComponent para pintar la imagen de fondo.
+     * Constructor que inicializa el panel eliminar participante con el JFrame principal.
+     * Configura el panel.
      *
-     * @param frame el JFrame contenedor donde se mostrará este panel.
+     * @param frame el JFrame donde se mostrará este panel.
      */
     public PanelEliminarParticipante(JFrame frame) {
         super(frame);
         configurar();
         agregarComponentes();
     }
+    /**
+     * Configura las propiedades visuales del panel, incluyendo el layout y el color de fondo.
+     */
     @Override
     public void configurar() {
         panel.setLayout(null);
         panel.setBackground(new Color(70, 45, 90));
     }
+    /**
+     * Agrega los componentes gráficos al panel, incluyendo:
+     * - Combo box con los nombres de los participantes actuales.
+     * - Botón para eliminar el participante seleccionado.
+     * - Botón para volver al panel anterior.
+     */
     @Override
     public void agregarComponentes() {
         JComboBox<String> comboBoxParticipantes = new JComboBox<>();
@@ -63,6 +74,11 @@ public class PanelEliminarParticipante extends PanelBase{
         });
         panel.add(new BotonVolver(frame));
     }
+    /**
+     * Obtiene el {@link JPanel} principal que contiene todos los componentes del panel.
+     *
+     * @return el {@link JPanel} configurado con los componentes
+     */
     @Override
     public JPanel obtenerPanel() {
         return panel;
