@@ -22,7 +22,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PanelBracket extends PanelBase {
     private JPanel bracketPanel;  // Panel interno para mostrar las líneas de texto del bracket
-    private SwingWorker<Void, List<String>> worker;  // Worker que actualiza la información periódicamente
+
+    private SwingWorker<Void, List<String>> worker;// Worker que actualiza la información periódicamente
 
     /**
      * Constructor que crea el panel y configura su apariencia y comportamiento.
@@ -95,7 +96,7 @@ public class PanelBracket extends PanelBase {
                     // Visualización para torneo Eliminación Simple
                     if (Navegador.torneo instanceof TorneoEliminacionSimple) {
                         TorneoEliminacionSimple torneo = (TorneoEliminacionSimple) Navegador.torneo;
-                        lineas.add("Bracket de Eliminación Simple: " + torneo.nombre);
+                        lineas.add("Bracket de Eliminación Simple: " + torneo.obtenerNombre());
                         lineas.add("---------------------------------------------------------------------------------");
 
                         Enfrentamiento[][] rondas = torneo.obtenerRondas();
@@ -131,13 +132,13 @@ public class PanelBracket extends PanelBase {
                         // Visualización para torneo Liga
                     } else if (Navegador.torneo instanceof TorneoLiga) {
                         TorneoLiga torneo = (TorneoLiga) Navegador.torneo;
-                        lineas.add("Enfrentamientos de Liga: " + torneo.nombre);
+                        lineas.add("Enfrentamientos de Liga: " + torneo.obtenerNombre());
                         lineas.add("---------------------------------------------------------------------------------");
                         lineas.add(String.format("%-30s | %-19s | %-10s", "Enfrentamiento", "Fecha", "Resultado"));
                         lineas.add("-------------------------------------------------------------");
 
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-                        for (Enfrentamiento enf : torneo.enfrentamientos) {
+                        for (Enfrentamiento enf : torneo.obtenerEnfrentamientos()) {
                             String p2Nombre = (enf.obtenerParticipante2() != null) ? enf.obtenerParticipante2().obtenerNombre() : "BYE";
                             String fechaFormateada = (enf.obtenerFecha() != null) ? enf.obtenerFecha().format(formatter) : "Sin fecha";
                             String resultado = enf.haTerminadoEncuentro() ?

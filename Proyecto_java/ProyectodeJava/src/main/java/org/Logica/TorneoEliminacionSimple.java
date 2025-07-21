@@ -24,7 +24,10 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
 
     /** Array con los enfrentamientos actuales de la ronda */
 
-    public Enfrentamiento[] rondasS;
+    private Enfrentamiento[] rondasS;
+    public Enfrentamiento[] obtenerRondasS(){
+        return rondasS;
+    }
 
     /** Índice de la ronda actual */
 
@@ -36,7 +39,10 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
 
     /** Estado del torneo: 0=no iniciado, 1=iniciado, 2=finalizado */
 
-    public int iniciado = 0;
+    private int iniciado = 0;
+    public int obtenerIniciado(){
+        return iniciado;
+    }
 
     /**
      * Constructor que inicializa el torneo con nombre, disciplina y máximo participantes.
@@ -95,7 +101,7 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
     @Override
     public void iniciarTorneo() throws TorneoException{
         if (!esPotenciaDeDos(participantes.size())) {
-            throw new TorneoException("Para iniciar el formato de eliminación simple eñ número de participantes debe ser potencia de 2");
+            throw new TorneoException("Para iniciar el formato de eliminación simple el número de participantes debe ser potencia de 2");
         }
         super.iniciarTorneo();
         iniciado = 1;

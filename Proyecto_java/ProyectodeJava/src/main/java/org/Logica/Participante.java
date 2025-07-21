@@ -1,5 +1,7 @@
 package org.Logica;
 
+import java.util.Objects;
+
 /**
  * Clase abstracta que representa un participante en un torneo.
  * <p>
@@ -59,5 +61,19 @@ public abstract class Participante {
     @Override
     public String toString() {
         return nombre;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Participante p = (Participante) obj;
+        return nombre.equals(p.nombre) & contacto.equals(p.contacto);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(nombre, contacto);
     }
 }

@@ -93,13 +93,13 @@ public class PanelCalendario extends PanelBase {
                     List<String> lineas = new ArrayList<>();
 
                     if (Navegador.torneo instanceof TorneoLiga torneo) {
-                        lineas.add("Enfrentamientos: " + torneo.nombre);
+                        lineas.add("Enfrentamientos: " + torneo.obtenerNombre());
                         lineas.add("-------------------------------------------------------------");
                         lineas.add(String.format("%-30s | %-19s | %-10s", "Enfrentamiento", "Fecha", "Resultado"));
                         lineas.add("-------------------------------------------------------------");
 
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-                        for (Enfrentamiento enf : torneo.enfrentamientos) {
+                        for (Enfrentamiento enf : torneo.obtenerEnfrentamientos()) {
                             String p2 = (enf.obtenerParticipante2() != null) ? enf.obtenerParticipante2().obtenerNombre() : "BYE";
                             String fecha = (enf.obtenerFecha() != null) ? enf.obtenerFecha().format(formatter) : "Sin fecha";
                             String resultado = enf.haTerminadoEncuentro()
@@ -114,13 +114,13 @@ public class PanelCalendario extends PanelBase {
                         lineas.add("-------------------------------------------------------------");
 
                     } else if (Navegador.torneo instanceof TorneoEliminacionSimple torneo) {
-                        lineas.add("Enfrentamientos de la Ronda Actual: " + torneo.nombre);
+                        lineas.add("Enfrentamientos de la Ronda Actual: " + torneo.obtenerNombre());
                         lineas.add("-------------------------------------------------------------");
                         lineas.add(String.format("%-30s | %-19s | %-10s", "Enfrentamiento", "Fecha", "Resultado"));
                         lineas.add("-------------------------------------------------------------");
 
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-                        for (Enfrentamiento enf : torneo.rondasS) {
+                        for (Enfrentamiento enf : torneo.obtenerRondasS()) {
                             if (enf != null) {
                                 String p2 = (enf.obtenerParticipante2() != null) ? enf.obtenerParticipante2().obtenerNombre() : "BYE";
                                 String fecha = (enf.obtenerFecha() != null) ? enf.obtenerFecha().format(formatter) : "Sin fecha";

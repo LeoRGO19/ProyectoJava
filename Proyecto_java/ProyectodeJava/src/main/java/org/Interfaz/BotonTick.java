@@ -53,7 +53,6 @@ public class BotonTick extends BotonBase {
     public void alPresionar() throws TorneoException {
         Navegador.historial.push(new PanelTipoTorneo(frame));
         cambiarPanel(new PanelPrincipal(frame));
-
         GestorDeInstanciaCreadora gestor = GestorDeInstanciaCreadora.getInstance();
         Creador pedro = gestor.obtenerCreador(Navegador.t);
 

@@ -128,7 +128,7 @@ public class PanelTabla extends PanelBase {
         List<String> out = new ArrayList<>();
 
         if (Navegador.torneo instanceof TorneoLiga liga) {
-            out.add("Tabla de Clasificación: " + liga.nombre);
+            out.add("Tabla de Clasificación: " + liga.obtenerNombre());
             out.add("-".repeat(81));
             out.add(String.format("%-20s | %-6s | %-8s | %-8s | %-10s | %-10s",
                     "Participante", "Puntos", "Victorias", "Derrotas", "P.Favor", "P.Contra"));
@@ -136,23 +136,23 @@ public class PanelTabla extends PanelBase {
 
             // Ordena índices de participantes según criterios: puntos, victorias, puntos a favor, puntos en contra
             ArrayList<Integer> idx = new ArrayList<>();
-            for (int i = 0; i < liga.participantes.size(); i++) idx.add(i);
+            for (int i = 0; i < liga.obtenerParticipantes().size(); i++) idx.add(i);
 
             idx.sort((i, j) -> {
-                int c = liga.puntos.get(j) - liga.puntos.get(i);
+                int c = liga.obtenerPuntos().get(j) - liga.obtenerPuntos().get(i);
                 if (c != 0) return c;
-                c = liga.victorias.get(j) - liga.victorias.get(i);
+                c = liga.obtenerVictorias().get(j) - liga.obtenerVictorias().get(i);
                 if (c != 0) return c;
-                c = liga.puntosAFavor.get(j) - liga.puntosAFavor.get(i);
-                return (c != 0) ? c : liga.puntosEnContra.get(i) - liga.puntosEnContra.get(j);
+                c = liga.obtenerPuntosAFavor().get(j) - liga.obtenerPuntosAFavor().get(i);
+                return (c != 0) ? c : liga.obtenerPuntosEnContra().get(i) - liga.obtenerPuntosEnContra().get(j);
             });
 
             // Añade cada participante con sus datos formateados
             for (int i : idx) {
                 out.add(String.format("%-20s | %-6d | %-8d | %-8d | %-10d | %-10d",
-                        liga.participantes.get(i).obtenerNombre(),
-                        liga.puntos.get(i), liga.victorias.get(i), liga.derrotas.get(i),
-                        liga.puntosAFavor.get(i), liga.puntosEnContra.get(i)));
+                        liga.obtenerParticipantes().get(i).obtenerNombre(),
+                        liga.obtenerPuntos().get(i), liga.obtenerVictorias().get(i), liga.obtenerPuntosEnContra().get(i),
+                        liga.obtenerPuntosAFavor().get(i), liga.obtenerPuntosEnContra().get(i)));
             }
 
             out.add("-".repeat(81));

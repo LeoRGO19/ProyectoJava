@@ -7,18 +7,29 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class PanelFormularioParticipante extends PanelBase{
+
+    private ArrayList<Participante> participantesEntrada = new ArrayList<>();
+
+    private JRadioButton rbEquipos;
+    private JRadioButton rbIndividuales;
+
+    private JTextField campoNombre;
+    private JTextField campoApellido;
+    private JTextField campoEdad;
+    private JTextField campoContacto;
+    private JTextField campoCantidadPorEquipo;
+
+    private JLabel lblCantidadPorEquipo;
+
+    private JTextArea areaParticipantes;
+
+    private int cantidadPorEquipo;
     /**
      * Constructor que inicializa el panel base con el JFrame dado.
      * Crea un JPanel con layout nulo y sobreescribe paintComponent para pintar la imagen de fondo.
      *
      * @param frame el JFrame contenedor donde se mostrará este panel.
      */
-    ArrayList<Participante> participantesEntrada = new ArrayList<>();
-    private JRadioButton rbEquipos;
-    private JRadioButton rbIndividuales;
-    private JTextField campoCantidadPorEquipo;
-    private JLabel lblCantidadPorEquipo;
-    int cantidadPorEquipo;
     public PanelFormularioParticipante(JFrame frame) {
         super(frame);
         configurar();
@@ -36,7 +47,7 @@ public class PanelFormularioParticipante extends PanelBase{
         lblNombre.setBounds(550, 100, 100, 50);
         panel.add(lblNombre);
 
-        JTextField campoNombre = new JTextField();
+        campoNombre = new JTextField();
         campoNombre.setBounds(650, 100, 200, 50);
         panel.add(campoNombre);
 
@@ -45,7 +56,7 @@ public class PanelFormularioParticipante extends PanelBase{
         lblApellido.setBounds(550, 180, 100, 50);
         panel.add(lblApellido);
 
-        JTextField campoApellido = new JTextField();
+        campoApellido = new JTextField();
         campoApellido.setBounds(650, 180, 200, 50);
         panel.add(campoApellido);
 
@@ -54,7 +65,7 @@ public class PanelFormularioParticipante extends PanelBase{
         lblEdad.setBounds(550, 270, 100, 50);
         panel.add(lblEdad);
 
-        JTextField campoEdad = new JTextField();
+        campoEdad = new JTextField();
         campoEdad.setBounds(650, 270, 200, 50);
         panel.add(campoEdad);
 
@@ -63,7 +74,7 @@ public class PanelFormularioParticipante extends PanelBase{
         lblContacto.setBounds(550, 360, 100, 50);
         panel.add(lblContacto);
 
-        JTextField campoContacto = new JTextField();
+        campoContacto = new JTextField();
         campoContacto.setBounds(650, 360, 200, 50);
         panel.add(campoContacto);
 
@@ -72,7 +83,7 @@ public class PanelFormularioParticipante extends PanelBase{
         lblLista.setBounds(950, 200, 200, 50);
         panel.add(lblLista);
 
-        JTextArea areaParticipantes = new JTextArea();
+        areaParticipantes = new JTextArea();
         areaParticipantes.setEditable(false);
         JScrollPane scroll = new JScrollPane(areaParticipantes);
         scroll.setBounds(950, 300, 300, 200);

@@ -18,7 +18,7 @@ public class PanelInscripcion extends PanelBase{
     @Override
     public void configurar() {
         panel.setLayout(null);
-        panel.setBackground(new Color(40, 40, 40)); // Se sobreescribe el primer setBackground
+        setImagenFondo("/fondoprincipal.jpg");// Se sobreescribe el primer setBackground
         panel.setForeground(Color.WHITE);
         panel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         panel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));

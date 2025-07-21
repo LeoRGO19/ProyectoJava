@@ -123,7 +123,7 @@ public class LectorParticipantes {
     private static void procesarGrupoActual(ArrayList<IndividuoParticipante> grupoActual, ArrayList<Participante> equipos, int equipoCount) throws TorneoException {
         if (!grupoActual.isEmpty()) {
             String nombreEquipo = "Equipo " + equipoCount;
-            Equipo equipo = new Equipo(nombreEquipo, nombreEquipo.toLowerCase().replace(" ", "_") + "@equipo.com");
+            Equipo equipo = new Equipo(nombreEquipo, nombreEquipo.toLowerCase().replace(" ", "_") + "@gmail.com");
             for (IndividuoParticipante miembro : grupoActual) {
                 equipo.agregarMiembro(miembro);
             }

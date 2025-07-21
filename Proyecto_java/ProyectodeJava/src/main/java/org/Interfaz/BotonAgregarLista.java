@@ -30,17 +30,8 @@ public class BotonAgregarLista extends BotonBase{
 
     @Override
     public void alPresionar() throws TorneoException {
-        try {
-            ArrayList<Participante> resultado = LectorParticipantes.leerParticipantes("usuarios.txt");
-            ((TorneoAbstracto) Navegador.torneo).agregarParticipantesDesdeLista(resultado);
-
-            for (Participante d : ((TorneoAbstracto) Navegador.torneo).obtenerParticipantes()) {
-                System.out.println(d);
-            }
-        } catch (TorneoException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE );
-        }
         Navegador.historial.push(new PanelInscripcion(frame));
+        cambiarPanel(new PanelAgregarLista(frame));
         System.out.println("¡Botón AgregarLista presionado!");
     }
 }

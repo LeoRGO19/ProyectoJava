@@ -14,7 +14,11 @@ public abstract class TorneoAbstracto {
 
     /** Nombre del torneo */
 
-    public String nombre;
+    protected String nombre;
+
+    public String obtenerNombre(){
+        return nombre;
+    }
 
     /** Disciplina del torneo */
 
@@ -26,7 +30,7 @@ public abstract class TorneoAbstracto {
 
     /** Lista de participantes registrados */
 
-    public ArrayList<Participante> participantes;
+    protected ArrayList<Participante> participantes;
 
     /** Calendario asociado al torneo */
 
@@ -39,6 +43,9 @@ public abstract class TorneoAbstracto {
     /** Indica si el torneo ha sido iniciado */
 
     protected boolean torneoIniciado;
+    public boolean haIniciado(){
+        return torneoIniciado;
+    }
 
     /**
      * Constructor que inicializa el torneo con nombre, disciplina y máximo de participantes.
@@ -101,6 +108,11 @@ public abstract class TorneoAbstracto {
             if ((p instanceof Equipo && this.obtenerParticipantes().getFirst() instanceof IndividuoParticipante)||(p instanceof IndividuoParticipante && this.obtenerParticipantes().getFirst() instanceof Equipo)) {
                 throw new TorneoException("El tipo de participante a ingresar es incompatible con los que ya hay");
             }
+            for (Participante j: this.obtenerParticipantes()) {
+                if(j.equals(p)){
+                    throw new TorneoException("Este participante ya ha está inscrito");
+                }
+            }
         }
 
         if (participantes.size() >= maxParticipantes) {
@@ -153,9 +165,21 @@ public abstract class TorneoAbstracto {
                 throw new TorneoException("La lista contiene una mezcla de individuos y equipos, lo cual no está permitido.");
             }
         }
+        if (!this.obtenerParticipantes().isEmpty()) {
+            if ((listaParticipantes.getFirst() instanceof Equipo && this.obtenerParticipantes().getFirst() instanceof IndividuoParticipante)||(listaParticipantes.getFirst() instanceof IndividuoParticipante && this.obtenerParticipantes().getFirst() instanceof Equipo)) {
+                throw new TorneoException("El tipo de participante a ingresar es incompatible con los que ya hay");
+            }
+            for (Participante p: listaParticipantes) {
+                for (Participante j: this.obtenerParticipantes()) {
+                    if(p.equals(j)){
+                        throw new TorneoException("Alguno de los participantes ya está inscrito");
+                    }
+                }
+            }
+        }
         // Agregar cada participante usando el método existente
-        for (Participante p : listaParticipantes) {
-            agregarParticipante(p);
+        for (Participante ppp : listaParticipantes) {
+            agregarParticipante(ppp);
         }
     }
 

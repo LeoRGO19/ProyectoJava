@@ -28,37 +28,55 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
      * Lista de puntos acumulados por cada participante.
      */
 
-    public ArrayList<Integer> puntos;
+    private ArrayList<Integer> puntos;
+
+    public ArrayList<Integer> obtenerPuntos(){
+        return puntos;
+    }
 
     /**
      * Lista de victorias acumuladas por cada participante.
      */
 
-    public ArrayList<Integer> victorias;
+    private ArrayList<Integer> victorias;
+    public ArrayList<Integer> obtenerVictorias(){
+        return victorias;
+    }
 
     /**
      * Lista de derrotas acumuladas por cada participante.
      */
 
-    public ArrayList<Integer> derrotas;
+    private ArrayList<Integer> derrotas;
+    public ArrayList<Integer> obtenerDerrotas(){
+        return derrotas;
+    }
 
     /**
      * Lista de puntos anotados a favor por cada participante.
      */
 
-    public ArrayList<Integer> puntosAFavor;
+    private ArrayList<Integer> puntosAFavor;
+    public ArrayList<Integer> obtenerPuntosAFavor(){
+        return puntosAFavor;
+    }
 
     /**
      * Lista de puntos recibidos en contra por cada participante.
      */
 
-    public ArrayList<Integer> puntosEnContra;
-
+    private ArrayList<Integer> puntosEnContra;
+    public ArrayList<Integer> obtenerPuntosEnContra(){
+        return puntosEnContra;
+    }
     /**
      * Lista de enfrentamientos generados para el torneo.
      */
 
-    public ArrayList<Enfrentamiento> enfrentamientos;
+    private ArrayList<Enfrentamiento> enfrentamientos;
+    public ArrayList<Enfrentamiento> obtenerEnfrentamientos(){
+        return enfrentamientos;
+    }
 
     /**
      * Construye un torneo en formato Liga con los datos básicos.

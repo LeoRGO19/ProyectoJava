@@ -1,11 +1,10 @@
 package org.Interfaz;
 
 
-
+import org.Logica.*;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Panel principal de la aplicación que actúa como menú inicial.
@@ -13,7 +12,10 @@ import java.util.List;
  * observar torneos y comenzar un torneo.
  */
 public class PanelPrincipal extends PanelBase {
-
+    private JButton botonIniciarTorneo;
+    private JButton botonInscribirEnTorneo;
+    private JButton botonCrearTorneo;
+    private JButton botonSpectearTorneo;
     /**
      * Constructor que recibe el JFrame principal y configura el panel.
      *
@@ -52,7 +54,7 @@ public class PanelPrincipal extends PanelBase {
         panel.add(titulo);
 
         // Botón Crear Torneo
-        JButton botonCrearTorneo = new JButton("Crear Torneo");
+        botonCrearTorneo = new JButton("Crear Torneo");
         botonCrearTorneo.setBackground(new Color(40, 40, 40));
         botonCrearTorneo.setForeground(Color.WHITE);
         botonCrearTorneo.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -63,15 +65,35 @@ public class PanelPrincipal extends PanelBase {
         panel.add(botonCrearTorneo);
 
         botonCrearTorneo.addActionListener(e -> {
-            PanelDisciplina panelDisciplina = new PanelDisciplina(frame);
-            Navegador.historial.push(new PanelPrincipal(frame));  // Guarda el estado actual
-            frame.setContentPane(panelDisciplina.obtenerPanel());
-            frame.revalidate();
-            frame.repaint();
+            if(Navegador.torneo != null){
+                int respuesta = JOptionPane.showConfirmDialog(
+                        null,
+                        "Ya hay un torneo creado.\nSi creas otro, el otro se borrará.\n¿Deseas continuar?",
+                        "Confirmar creación de torneo",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    PanelDisciplina panelDisciplina = new PanelDisciplina(frame);
+                    Navegador.historial.push(new PanelPrincipal(frame));  // Guarda el estado actual
+                    frame.setContentPane(panelDisciplina.obtenerPanel());
+                    frame.revalidate();
+                    frame.repaint();
+                    System.out.println("Creando nuevo torneo...");
+                } else {
+                    System.out.println("Operación cancelada.");
+                }
+            } else {
+                PanelDisciplina panelDisciplina = new PanelDisciplina(frame);
+                Navegador.historial.push(new PanelPrincipal(frame));  // Guarda el estado actual
+                frame.setContentPane(panelDisciplina.obtenerPanel());
+                frame.revalidate();
+                frame.repaint();
+            }
         });
 
         // Botón Inscripción Torneo
-        JButton botonInscribirEnTorneo = new JButton("Inscripcion Torneo");
+        botonInscribirEnTorneo = new JButton("Inscripcion Torneo");
         botonInscribirEnTorneo.setBackground(new Color(40, 40, 40));
         botonInscribirEnTorneo.setForeground(Color.WHITE);
         botonInscribirEnTorneo.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -84,16 +106,24 @@ public class PanelPrincipal extends PanelBase {
 
 
         botonInscribirEnTorneo.addActionListener(e -> {
-            PanelInscripcion panelInscripcion = new PanelInscripcion(frame);
-            panelInscripcion.setImagenFondo("/fondoprincipal.jpg");
-            Navegador.historial.push(new PanelPrincipal(frame)); // Guardar estado actual
-            frame.setContentPane(panelInscripcion.obtenerPanel());
-            frame.revalidate();
-            frame.repaint();
+            if (Navegador.torneo == null) {
+                JOptionPane.showMessageDialog(frame, "No hay un torneo válido para inscribir, crea uno.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else if (((TorneoAbstracto) Navegador.torneo).haIniciado()){
+                JOptionPane.showMessageDialog(frame, "No puedes administrar los participantes si el torneo ha iniciado", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else {
+                PanelInscripcion panelInscripcion = new PanelInscripcion(frame);
+                panelInscripcion.setImagenFondo("/fondoprincipal.jpg");
+                Navegador.historial.push(new PanelPrincipal(frame)); // Guardar estado actual
+                frame.setContentPane(panelInscripcion.obtenerPanel());
+                frame.revalidate();
+                frame.repaint();
+            }
         });
 
         // Botón Observar Torneo
-        JButton botonSpectearTorneo = new JButton("Observar Torneo");
+        botonSpectearTorneo = new JButton("Observar Torneo");
         botonSpectearTorneo.setBackground(new Color(40, 40, 40));
         botonSpectearTorneo.setForeground(Color.WHITE);
         botonSpectearTorneo.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -104,16 +134,24 @@ public class PanelPrincipal extends PanelBase {
         panel.add(botonSpectearTorneo);
 
         botonSpectearTorneo.addActionListener(e -> {
-            PanelObservador panelObservador = new PanelObservador(frame);
-            panelObservador.setImagenFondo("/fondoprincipal.jpg");
-            Navegador.historial.push(new PanelPrincipal(frame)); // Guardar estado actual
-            frame.setContentPane(panelObservador.obtenerPanel());
-            frame.revalidate();
-            frame.repaint();
+            if (Navegador.torneo == null) {
+                JOptionPane.showMessageDialog(frame, "No hay un torneo válido para visualizar, crea uno.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else if (!((TorneoAbstracto) Navegador.torneo).haIniciado()){
+                JOptionPane.showMessageDialog(frame, "No puedes visualizar un torneo que no ha iniciado", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }else {
+                PanelObservador panelObservador = new PanelObservador(frame);
+                panelObservador.setImagenFondo("/fondoprincipal.jpg");
+                Navegador.historial.push(new PanelPrincipal(frame)); // Guardar estado actual
+                frame.setContentPane(panelObservador.obtenerPanel());
+                frame.revalidate();
+                frame.repaint();
+            }
         });
 
         // Botón Iniciar Torneo
-        JButton botonIniciarTorneo = new JButton("Iniciar Torneo");
+        botonIniciarTorneo = new JButton("Iniciar Torneo");
         botonIniciarTorneo.setFont(new Font("Segoe UI", Font.BOLD, 18));
         botonIniciarTorneo.setFocusPainted(false);
         botonIniciarTorneo.setBackground(new Color(40, 40, 40));
@@ -124,21 +162,32 @@ public class PanelPrincipal extends PanelBase {
         panel.add(botonIniciarTorneo);
 
         botonIniciarTorneo.addActionListener(e -> {
-            botonIniciarTorneo.setEnabled(false);  // Deshabilitar botón para evitar múltiples clicks
-            SwingWorker<Void, Void> worker = new SwingWorker<>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    Navegador.torneo.iniciarTorneo();
-                    return null;
-                }
+            if (Navegador.torneo == null) {
+                JOptionPane.showMessageDialog(frame, "No hay un torneo válido para iniciar, crea uno.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else if (((TorneoAbstracto) Navegador.torneo).haIniciado()){
+                JOptionPane.showMessageDialog(frame, "El torneo ya está iniciado", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else {
+                SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        try {
+                            Navegador.torneo.iniciarTorneo();
+                        }catch (TorneoException ex){
+                            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        return null;
+                    }
 
-                @Override
-                protected void done() {
-                    botonIniciarTorneo.setEnabled(true);  // Rehabilitar botón
-                    System.out.println("Torneo iniciado correctamente.");
-                }
-            };
-            worker.execute();
+                    @Override
+                    protected void done() {
+                        System.out.println("Torneo iniciado correctamente.");
+
+                    }
+                };
+                worker.execute();
+            }
         });
     }
 
@@ -147,6 +196,7 @@ public class PanelPrincipal extends PanelBase {
      *
      * @return JPanel del panel principal.
      */
+
     @Override
     public JPanel obtenerPanel() {
         return panel;

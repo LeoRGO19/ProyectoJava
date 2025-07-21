@@ -120,9 +120,9 @@ public class PanelEnfrentamiento extends PanelBase {
      */
     private Enfrentamiento[] getEnfrentamientos() {
         if (Navegador.torneo instanceof TorneoEliminacionSimple elim) {
-            return elim.rondasS;
+            return elim.obtenerRondasS();
         } else if (Navegador.torneo instanceof TorneoLiga liga) {
-            return liga.enfrentamientos.toArray(new Enfrentamiento[0]);
+            return liga.obtenerEnfrentamientos().toArray(new Enfrentamiento[0]);
         }
         return new Enfrentamiento[0];
     }
