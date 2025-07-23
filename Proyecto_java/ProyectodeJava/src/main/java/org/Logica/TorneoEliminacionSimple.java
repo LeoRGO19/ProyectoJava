@@ -40,8 +40,25 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
     /** Estado del torneo: 0=no iniciado, 1=iniciado, 2=finalizado */
 
     private int iniciado = 0;
+    /**
+     * getter del entero iniciado.
+     *
+     * @return iniciado.
+     */
     public int obtenerIniciado(){
         return iniciado;
+    }
+    /**
+     * método que retorna si el torneo ha terminado.
+     *
+     * @return false o true.
+     */
+    public boolean haTerminado(){
+        if(iniciado == 2){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -58,34 +75,73 @@ public class TorneoEliminacionSimple extends TorneoAbstracto implements Torneo, 
         rondas = null;
         numRondas = 0;
     }
-
+    /**
+     * método para agregar participantes desde un archivo.
+     * llama al mismo método de la superclase.
+     */
     @Override
     public void agregarParticipantesDesdeLista(ArrayList<Participante> listaParticipantes) throws TorneoException {
         super.agregarParticipantesDesdeLista(listaParticipantes);
     }
+    /**
+     * getter de la lista de participantes.
+     *
+     * @return un ArrayList<Participante></Participante>
+     */
     public ArrayList<Participante> obtenerParticipantes(){
         return super.obtenerParticipantes();
     }
+    /**
+     * método para configurar el torneo.
+     * @param nombre          Nombre del torneo.
+     * @param disciplina      Disciplina del torneo.
+     * @param maxParticipantes Número máximo de participantes.
+     * llama a al mismo método de la superclase.
+     */
     @Override
     public void configurar(String nombre, String disciplina, int maxParticipantes) {
         super.configurar(nombre, disciplina, maxParticipantes);
     }
-
+    /**
+     * método para agregar participantes.
+     * @param p          Participante a agregar.
+     * llama a al mismo método de la superclase.
+     */
     public void agregarParticipante(Participante p) throws TorneoException{
         super.agregarParticipante(p);
     }
-
+    /**
+     * método para eliminar participantes.
+     * * @param p          Participante a eliminar.
+     * llama a al mismo método de la superclase.
+     */
     public void eliminarParticipante(Participante p) throws TorneoException{
         super.eliminarParticipante(p);
     }
+    /**
+     * método para registrar observadores.
+     * @param observador       ObservadorTorneo (observador) a registrar.
+     * llama a al mismo método de la superclase.
+     */
     @Override
     public void registrarObservador(ObservadorTorneo observador) {
         super.registrarObservador(observador);
     }
+    /**
+     * método eliminar observadores registrados.
+     * @param observador       ObservadorTorneo (observador) a eliminar.
+     * llama a al mismo método de la superclase.
+     */
     @Override
     public void eliminarObservador(ObservadorTorneo observador) {
         super.eliminarObservador(observador);
     }
+    /**
+     * método notificar observadores registrados.
+     * @param tipo       tipo de evento.
+     * @param datos       objeto actualizado.
+     * llama a al mismo método de la superclase.
+     */
     @Override
     public void notificarObservadores(TipoEvento tipo, Object datos) {
         super.notificarObservadores(tipo, datos);

@@ -59,7 +59,7 @@ public abstract class TorneoAbstracto {
     }
 
     /**
-     * Obtiene la lista de participantes del torneo.
+     * getter de la lista de participantes del torneo.
      *
      * @return La lista de participantes.
      */
@@ -67,7 +67,7 @@ public abstract class TorneoAbstracto {
         return participantes;
     }
     /**
-     * Obtiene el nombre del torneo.
+     * getter del nombre del torneo.
      *
      * @return el atributo nombre.
      */
@@ -90,7 +90,7 @@ public abstract class TorneoAbstracto {
      * @param maxParticipantes El máximo de participantes permitidos.
      */
 
-    protected void configurar(String nombre, String disciplina, int maxParticipantes) {
+    public void configurar(String nombre, String disciplina, int maxParticipantes) {
         this.nombre = nombre;
         this.disciplina = Disciplina.valueOf(disciplina);
         this.maxParticipantes = maxParticipantes;
@@ -198,7 +198,7 @@ public abstract class TorneoAbstracto {
      * @throws TorneoException si hay menos de 2 participantes al momento de iniciar.
      */
 
-    protected void iniciarTorneo() throws TorneoException {
+    public void iniciarTorneo() throws TorneoException {
         if (participantes.size() < 2) {
             throw new TorneoException("Se necesitan al menos 2 participantes para iniciar el torneo.");
         } else {
@@ -213,7 +213,7 @@ public abstract class TorneoAbstracto {
      * @param observador El observador a registrar.
      */
 
-    protected void registrarObservador(ObservadorTorneo observador) {
+    public void registrarObservador(ObservadorTorneo observador) {
         observadores.add(observador);
     }
 
@@ -223,7 +223,7 @@ public abstract class TorneoAbstracto {
      * @param observador El observador a eliminar.
      */
 
-    protected void eliminarObservador(ObservadorTorneo observador) {
+    public void eliminarObservador(ObservadorTorneo observador) {
         observadores.remove(observador);
     }
 
@@ -234,9 +234,28 @@ public abstract class TorneoAbstracto {
      * @param datos Datos adicionales asociados al evento (puede ser null).
      */
 
-    protected void notificarObservadores(TipoEvento tipo, Object datos) {
+    public void notificarObservadores(TipoEvento tipo, Object datos) {
         for (ObservadorTorneo observador : observadores) {
             observador.actualizar(new EventoTorneo(tipo, (Torneo) this, datos));
         }
+    }
+    public ArrayList<ObservadorTorneo> obtenerObservadores(){
+        return observadores;
+    }
+    /**
+     * getter de la disciplina.
+     *
+     * @return disciplina.
+     */
+    public Disciplina obtenerDisciplina(){
+        return disciplina;
+    }
+    /**
+     * getter del valor maximo de participantes.
+     *
+     * @return maxParticipantes.
+     */
+    public int obtenerMaximo(){
+        return maxParticipantes;
     }
 }

@@ -22,7 +22,13 @@ public abstract class Participante {
      * @param nombre  El nombre del participante.
      * @param contacto Información de contacto del participante.
      */
-    public Participante(String nombre, String contacto) {
+    public Participante(String nombre, String contacto) throws TorneoException {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new TorneoException("El apellido del participante no puede ser nulo o vacío.");
+        }
+        if (contacto == null || contacto.trim().isEmpty()) {
+            throw new TorneoException("El apellido del participante no puede ser nulo o vacío.");
+        }
         this.nombre = nombre;
         this.contacto = contacto;
     }

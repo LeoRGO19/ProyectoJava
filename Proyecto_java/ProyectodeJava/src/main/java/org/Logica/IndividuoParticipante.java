@@ -21,8 +21,13 @@ public class IndividuoParticipante extends Participante {
      */
     public IndividuoParticipante(String nombre, String apellido, int edad, String contacto) throws TorneoException {
         super(nombre, contacto);
+
         if (apellido == null || apellido.trim().isEmpty()) {
             throw new TorneoException("El apellido del participante no puede ser nulo o vacío.");
+        }
+        String edadStr = String.valueOf(edad);
+        if (edadStr.trim().isEmpty()) {
+            throw new TorneoException("La edad no puede ser nula o vacía.");
         }
         if (edad < 18 || edad > 100) {
             throw new TorneoException("La edad del participante debe ser mayor de 18 y no mayor a 100");

@@ -12,7 +12,6 @@ package org.Logica;
  *
  */
 public interface Torneo {
-
     /**
      * Configura los datos iniciales del torneo.
      *
