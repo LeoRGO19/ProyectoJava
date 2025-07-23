@@ -27,7 +27,7 @@ public class Equipo extends Participante {
      * @param contacto Información de contacto del equipo (puede ser correo, teléfono, etc.).
      */
 
-    public Equipo(String nombre, String contacto) {
+    public Equipo(String nombre, String contacto) throws TorneoException {
         super(nombre, contacto);
         this.listaEquipo = new ArrayList<>();
     }

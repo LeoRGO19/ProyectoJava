@@ -29,7 +29,11 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
      */
 
     private ArrayList<Integer> puntos;
-
+    /**
+     * getter de los puntos del torneo.
+     *
+     * @return La lista de puntos.
+     */
     public ArrayList<Integer> obtenerPuntos(){
         return puntos;
     }
@@ -39,6 +43,12 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
      */
 
     private ArrayList<Integer> victorias;
+    /**
+     * getter de las victorias del torneo.
+     *
+     * @return La lista de victorias.
+     */
+
     public ArrayList<Integer> obtenerVictorias(){
         return victorias;
     }
@@ -48,7 +58,12 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
      */
 
     private ArrayList<Integer> derrotas;
-    public ArrayList<Integer> obtenerDerrotas(){
+    /**
+     * getter de las derrotas del torneo.
+     *
+     * @return La lista de derrotas.
+     */
+    public ArrayList<Integer> obtenerDerrotas() {
         return derrotas;
     }
 
@@ -57,6 +72,13 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
      */
 
     private ArrayList<Integer> puntosAFavor;
+
+    /**
+     * getter de los puntos a favor en el torneo.
+     *
+     * @return La lista de puntos a favor.
+     */
+
     public ArrayList<Integer> obtenerPuntosAFavor(){
         return puntosAFavor;
     }
@@ -66,6 +88,12 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
      */
 
     private ArrayList<Integer> puntosEnContra;
+    /**
+     * getter de los puntos en contra en el torneo.
+     *
+     * @return La lista de puntos en contra.
+     */
+
     public ArrayList<Integer> obtenerPuntosEnContra(){
         return puntosEnContra;
     }
@@ -74,6 +102,14 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
      */
 
     private ArrayList<Enfrentamiento> enfrentamientos;
+
+    /**
+     * getter de la lista de Enfrentamientos.
+     *
+     * @return lista de enfrentamientos.
+     */
+
+
     public ArrayList<Enfrentamiento> obtenerEnfrentamientos(){
         return enfrentamientos;
     }
@@ -158,17 +194,30 @@ public class TorneoLiga extends TorneoAbstracto implements Torneo, SujetoTorneo 
         generarTabla();
         notificarObservadores(TipoEvento.TORNEO_INICIADO, this);
     }
-
+    /**
+     * método para registrar observadores.
+     * @param observador       ObservadorTorneo (observador) a registrar.
+     * llama a al mismo método de la superclase.
+     */
     @Override
     public void registrarObservador(ObservadorTorneo observador) {
         super.registrarObservador(observador);
     }
-
+    /**
+     * método eliminar observadores registrados.
+     * @param observador       ObservadorTorneo (observador) a eliminar.
+     * llama a al mismo método de la superclase.
+     */
     @Override
     public void eliminarObservador(ObservadorTorneo observador) {
         super.eliminarObservador(observador);
     }
-
+    /**
+     * método notificar observadores registrados.
+     * @param tipo       tipo de evento.
+     * @param datos       objeto actualizado.
+     * llama a al mismo método de la superclase.
+     */
     @Override
     public void notificarObservadores(TipoEvento tipo, Object datos) {
         super.notificarObservadores(tipo, datos);

@@ -1,5 +1,6 @@
 package org.Logica;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -26,6 +27,22 @@ public class Calendario {
         this.enfrentamientos = new ArrayList<>();
         this.fechaInicio = LocalDateTime.now();
         this.indices = new ArrayList<>();
+    }
+    /**
+     * Retorna la fecha inicial.
+     *
+     * @return la variable fechaInicio.
+     */
+    public LocalDateTime obtenerFechaInicio(){
+        return fechaInicio;
+    }
+    /**
+     * Retorna la lista de indices guardada.
+     *
+     * @return la lista indices.
+     */
+    public ArrayList<Integer> obtenerIndices(){
+        return indices;
     }
 
     /**

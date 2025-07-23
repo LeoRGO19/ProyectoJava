@@ -19,7 +19,7 @@ public abstract class Creador {
      * @param maxParticipantes El número máximo de participantes (mínimo 2).
      * @throws TorneoException Si algún parámetro es inválido.
      */
-    protected void validarParametros(String nombre, String disciplina, int maxParticipantes) throws TorneoException {
+    public void validarParametros(String nombre, String disciplina, int maxParticipantes) throws TorneoException {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new TorneoException("El nombre del torneo no puede ser nulo o vacío.");
         }
